@@ -1,0 +1,58 @@
+.schedules-container {
+  padding: 2rem;
+}
+
+.schedules-container h1 {
+  color: #2c3e50;
+  margin-bottom: 2rem;
+}
+
+.schedules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.schedule-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.schedule-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.schedule-header h3 {
+  color: #2c3e50;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.schedule-time {
+  color: #7a7f9a;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.schedule-description {
+  color: #7a7f9a;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.schedule-participants {
+  display: flex;
+  align-items: center;
+}
+
+.participant-count {
+  color: #4f6bed;
+  font-size: 0.9rem;
+  font-weight: 500;
+} 
