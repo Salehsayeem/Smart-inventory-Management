@@ -1,0 +1,7 @@
+.inventory-tracking-container {
+  padding: 1rem;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  margin-top: 1rem;
+} 

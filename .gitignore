@@ -1,0 +1,35 @@
+# === .NET (.NET 9) ===
+backend/**/bin/
+backend/**/obj/
+backend/**/*.user
+backend/**/*.suo
+backend/**/*.userosscache
+backend/**/*.sln.docstates
+backend/.vs/
+backend/**/TestResults/
+backend/**/*.dbmdl
+backend/**/*.log
+
+# === React (React 19) ===
+frontend/**/node_modules/
+frontend/**/build/
+frontend/**/.env
+frontend/**/.DS_Store
+frontend/**/.parcel-cache/
+frontend/**/.eslintcache
+frontend/**/npm-debug.log*
+frontend/**/yarn-debug.log*
+frontend/**/yarn-error.log*
+
+# === General ===
+*.log
+*.tmp
+*.swp
+*.bak
+*.old
+*.orig
+.env
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
