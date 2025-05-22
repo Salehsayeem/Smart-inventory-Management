@@ -32,7 +32,7 @@ namespace Sims.Api.Repositories
             await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                List<long> shopId = [];
+                List<RegisteredShopsDto> shops = new List<RegisteredShopsDto>();
                 if (!string.Equals(model.Password, model.ConfirmPassword))
                 {
                     return new CommonResponseDto()
@@ -69,11 +69,16 @@ namespace Sims.Api.Repositories
                     };
                     await _context.Shops.AddAsync(shop);
                     await _context.SaveChangesAsync();
-                    shopId.Add(shop.Id);
+                    shops.Add(new RegisteredShopsDto
+                    {
+                        Id = shop.Id,
+                        Name = shop.Name,
+                        Address = shop.Address,
+                    });
                 }
                 await SetPermissions(user.RoleId, user.Id);
 
-                string token = GenerateJwtToken(user, shopId);
+                string token = GenerateJwtToken(user, shops);
                 await transaction.CommitAsync();
                 return new CommonResponseDto()
                 {
@@ -101,12 +106,17 @@ namespace Sims.Api.Repositories
                     response.StatusCode = 400;
                     return response;
                 }
-                var shopId = await _context.Shops
+                var shops = await _context.Shops
                     .Where(s => s.CreatedBy == user.Id)
-                    .Select(s => s.Id)
+                    .Select(s => new RegisteredShopsDto
+                    {
+                        Id = s.Id,
+                        Name = s.Name,
+                        Address = s.Address,
+                    })
                     .ToListAsync();
 
-                string token = GenerateJwtToken(user, shopId);
+                string token = GenerateJwtToken(user, shops);
                 response.Message = "Logged in Successfully";
                 response.StatusCode = 200;
                 response.Data = token;
@@ -129,7 +139,16 @@ namespace Sims.Api.Repositories
                         Id = u.Id,
                         Email = u.Email,
                         FullName = u.FullName,
-                        RoleName = ((RoleEnums)u.RoleId).ToString()
+                        RoleName = ((RoleEnums)u.RoleId).ToString(),
+                        RegisteredShops = _context.Shops
+                            .Where(s => s.CreatedBy == u.Id)
+                            .Select(s => new RegisteredShopsDto()
+                            {
+                                Id = s.Id,
+                                Name = s.Name,
+                                Address = s.Address,
+                            })
+                            .ToList(),
                     }).AsNoTracking()
                     .FirstOrDefaultAsync();
                 return new CommonResponseDto()
@@ -148,7 +167,8 @@ namespace Sims.Api.Repositories
         {
             try
             {
-                var user = await _context.Users.FindAsync(model.Id);
+                
+                var user = await _context.Users.FindAsync(CommonHelper.StringToUlidConverter(model.Id!));
                 if (user == null)
                 {
                     return new CommonResponseDto()
@@ -315,7 +335,7 @@ namespace Sims.Api.Repositories
             }
         }
 
-        public string GenerateJwtToken(User user, List<long>? shopId)
+        public string GenerateJwtToken(User user, List<RegisteredShopsDto>? shops)
         {
             try
             {
@@ -328,7 +348,7 @@ namespace Sims.Api.Repositories
                         new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                         new Claim(JwtRegisteredClaimNames.Email, user.Email),
                         new Claim(JwtRegisteredClaimNames.Name, user.FullName),
-                        new Claim("Shop", JsonSerializer.Serialize(shopId ?? [])),
+                        new Claim("Shops", JsonSerializer.Serialize(shops )),
                         new Claim("Role", Enum.GetName(typeof(RoleEnums), user.RoleId) ?? string.Empty),
                         new Claim("Permissions", JsonSerializer.Serialize(GetPermissions(user.Id)))
                     }),

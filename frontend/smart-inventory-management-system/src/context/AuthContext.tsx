@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useLoading } from './LoadingContext';
 import { showError } from '../utils/toastService';
-import { LoginRequest, SignupRequest, JwtPayload, Permissions } from '../types';
+import { LoginRequest, SignupRequest, JwtPayload,  RegisteredShops } from '../types';
 import { apiService } from '../api/apiService';
 import { jwtDecode } from 'jwt-decode';
 import { setTokenInCookie, getTokenFromCookie, removeTokenFromCookie } from '../utils/cookieUtils';
@@ -17,7 +17,7 @@ interface AuthContextType {
     email: string;
     name: string;
     role: string;
-    permissions: Permissions;
+    shops: RegisteredShops[];
   } | null;
 }
 
@@ -48,13 +48,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     try {
       const decoded = jwtDecode<JwtPayload>(token);
-      const permissions = decoded.Permissions;
       setIsAuthenticated(true);
       setUserInfo({
         email: decoded.email,
         name: decoded.name || '',
         role: decoded.Role,
-        permissions: permissions
+        shops: decoded.Shops || [],
       });
 
     } catch (error) {

@@ -4,8 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { showSuccess } from "../../utils/toastService";
-import { PermissionDetails } from "../../types";
-import { getPermissionsFromCookie } from "../../utils/cookieUtils";
+import { PermissionDetails, RegisteredShops } from "../../types";
+import {
+  getPermissionsFromCookie,
+  setSelectedShopInCookie,
+} from "../../utils/cookieUtils";
 import "./Sidebar.css";
 
 const logoutItem = {
@@ -15,28 +18,25 @@ const logoutItem = {
   path: "/logout",
 };
 
-const shops = [
-  { id: 1, label: "Shop 1", subLabel: "New York" },
-  { id: 2, label: "Shop 2", subLabel: "Los Angeles" },
-  { id: 3, label: "Shop 3", subLabel: "Chicago" },
-  { id: 4, label: "Shop 4", subLabel: "Miami" },
-];
-
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true);
-  const [selectedShop, setSelectedShop] = useState(shops[0]);
+  const [selectedShop, setSelectedShop] = useState<RegisteredShops | null>(
+    null
+  );
   const [menuItems, setMenuItems] = useState<PermissionDetails[]>([]);
-  const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
+  const [shops, setShops] = useState<RegisteredShops[]>([]);
+  const [, setIsShopDropdownOpen] = useState(false);
+  const [isMoreDropdownOpen, setIsMoreDropdownOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { logout, userInfo } = useAuth();
-
   useEffect(() => {
     const permissions = getPermissionsFromCookie();
     let PermissionDetails: PermissionDetails[] = [];
     if (typeof permissions === "string") {
       try {
         PermissionDetails = JSON.parse(permissions).PermissionDetails;
+        console.log(PermissionDetails)
         if (PermissionDetails.length > 0) {
           setMenuItems(PermissionDetails);
         }
@@ -44,11 +44,32 @@ const Sidebar: React.FC = () => {
         console.error("Error parsing permissions:", error);
       }
     }
-  }, []);
+
+    try {
+      if (userInfo?.shops) {
+        const parsedShops =
+          typeof userInfo.shops === "string"
+            ? JSON.parse(userInfo.shops)
+            : userInfo.shops;
+
+        if (Array.isArray(parsedShops)) {
+          setShops(parsedShops);
+          if (parsedShops.length > 0) {
+            setSelectedShop(parsedShops[0]);
+            setSelectedShopInCookie(parsedShops[0].Id);
+          }
+        } else {
+          console.warn("Parsed shops is not a valid array:", parsedShops);
+        }
+      }
+    } catch (error) {
+      console.error("Error parsing shops:", error);
+    }
+  }, [userInfo]);
 
   const activeItem =
     menuItems.find(
-      (item: PermissionDetails) => location.pathname === `/${item.Path}`
+      (item: PermissionDetails) => location.pathname === `/${item.path}`
     ) ||
     (location.pathname === logoutItem.path ? logoutItem.label : "Dashboard");
 
@@ -59,13 +80,16 @@ const Sidebar: React.FC = () => {
   };
 
   const handleShopSelect = (shopId: number) => {
-    const shop = shops.find((s) => s.id === shopId);
+    const shop = userInfo?.shops.find((s) => s.id === shopId);
     if (shop) {
       setSelectedShop(shop);
       setIsShopDropdownOpen(false);
+      setSelectedShopInCookie(userInfo!.shops[0].id);
     }
   };
 
+  const visibleMenuItemsMobile = menuItems.slice(0, 2);
+  const dropdownMenuItemsMobile = menuItems.slice(2);
   return (
     <>
       <motion.div
@@ -109,50 +133,18 @@ const Sidebar: React.FC = () => {
                 <div className="sidebar-role">{userInfo?.role || "User"}</div>
                 <div className="sidebar-shop-container">
                   <select
-                    value={selectedShop.id}
-                    onChange={(e) => handleShopSelect(Number(e.target.value)) }
+                    value={selectedShop?.id || "0"}
+                    onChange={(e) => handleShopSelect(Number(e.target.value))}
                   >
-                    {shops.map((shop) => (
-                      <option key={`shop-${shop.id}`} value={shop.id}>
-                        {shop.label}
-                      </option>
-                    ))}
+                    {Array.isArray(shops)
+                      ? shops.map((shop) => (
+                          <option key={`shop-${shop.id}`} value={shop.id}>
+                            {shop.name}
+                          </option>
+                        ))
+                      : null}
                   </select>
                 </div>
-                {/* <div className="sidebar-shop-container">
-                  <div 
-                    className="dropdown-container"
-                    onMouseEnter={() => setIsShopDropdownOpen(true)}
-                    onMouseLeave={() => setIsShopDropdownOpen(false)}
-                  >
-                    <div className="dropdown-trigger">
-                      <i className="bx bx-store"></i>
-                      <span className="dropdown-label">{selectedShop.label}</span>
-                      <i className={`bx bx-chevron-${isShopDropdownOpen ? 'up' : 'down'} dropdown-chevron`}></i>
-                    </div>
-                    <AnimatePresence>
-                      {isShopDropdownOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.2 }}
-                          className="mobile-shop-select"
-                        >
-                          {shops.map((shop) => (
-                            <div
-                              key={`shop-${shop.id}`}
-                              className={`shop-option ${selectedShop.id === shop.id ? 'selected' : ''}`}
-                              onClick={() => handleShopSelect(shop.id)}
-                            >
-                              {shop.label}
-                            </div>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </div> */}
               </motion.div>
             )}
           </AnimatePresence>
@@ -163,8 +155,8 @@ const Sidebar: React.FC = () => {
           <div className="w-100 flex-grow-1 d-flex flex-column align-items-center">
             {menuItems.map((item: PermissionDetails) => (
               <NavLink
-                to={`/${item.Path}`}
-                key={item.Id}
+                to={`/${item.path}`}
+                key={item.id}
                 className={({ isActive }) =>
                   `sidebar-item-custom my-1 ${isActive ? "active" : ""} ${
                     isOpen ? "expanded" : "collapsed"
@@ -175,8 +167,8 @@ const Sidebar: React.FC = () => {
                 <div className="sidebar-icon-wrap">
                   <i
                     className={`bx ${
-                      activeItem === item.ModuleName ? "bxs" : "bx"
-                    }-${item.MenuIcon}`}
+                      activeItem === item.moduleName ? "bxs" : "bx"
+                    }-${item.menuIcon}`}
                   ></i>
                 </div>
                 <AnimatePresence>
@@ -188,7 +180,7 @@ const Sidebar: React.FC = () => {
                       exit={{ opacity: 0, x: -10 }}
                       transition={{ duration: 0.2 }}
                     >
-                      {item.ModuleName}
+                      {item.moduleName}
                     </motion.span>
                   )}
                 </AnimatePresence>
@@ -247,41 +239,101 @@ const Sidebar: React.FC = () => {
       {/* Mobile Shop Dropdown */}
       <div className="d-md-none mobile-shop-dropdown">
         <select
-          value={selectedShop.id}
+          value={selectedShop?.id || "0"}
           onChange={(e) => handleShopSelect(Number(e.target.value))}
         >
-          {shops.map((shop) => (
-            <option key={`shop-${shop.id}`} value={shop.id}>
-              {shop.label}
-            </option>
-          ))}
+          {Array.isArray(shops)
+            ? shops.map((shop) => (
+                <option key={`shop-${shop.id}`} value={shop.id}>
+                  {shop.name}
+                </option>
+              ))
+            : null}
         </select>
       </div>
 
       {/* Mobile Bottom Navigation Bar */}
-      <Navbar fixed="bottom" className="d-md-none bg-light border-top p-0">
-        <Nav className="w-100 d-flex flex-row justify-content-around">
-          {menuItems.map((item: PermissionDetails) => (
+      <Navbar
+        fixed="bottom"
+        className="d-md-none bg-light border-top p-0 mobile-bottom-navbar"
+      >
+        <Nav className="w-100 d-flex flex-row justify-content-around align-items-center">
+          {visibleMenuItemsMobile.map((item: PermissionDetails) => (
             <NavLink
-              to={`/${item.Path}`}
-              key={item.Id}
+              to={`/${item.path}`}
+              key={`mobile-${item.id}`}
               className={({ isActive }) =>
-                `text-center py-2 flex-fill ${isActive ? "active" : ""}`
+                `text-center py-2 flex-fill mobile-nav-item ${
+                  isActive ? "active" : ""
+                }`
               }
             >
               <i
                 className={`bx ${
-                  activeItem === item.ModuleName ? "bxs" : "bx"
-                }-${item.MenuIcon}`}
+                  activeItem === item.moduleName ? "bxs" : "bx"
+                }-${item.menuIcon}`}
               ></i>
             </NavLink>
           ))}
+
+          {/* More Items Dropdown Icon (if more than 2 items) */}
+          {dropdownMenuItemsMobile.length > 0 && (
+            <div
+              className="text-center py-2 flex-fill mobile-nav-item more-dropdown-container"
+              onMouseEnter={() => setIsMoreDropdownOpen(true)}
+              onMouseLeave={() => setIsMoreDropdownOpen(false)}
+            >
+              <i className="bx bx-menu"></i> {/* Bar icon for more items */}
+              {/* <span className="mobile-nav-label">More</span> */}
+              <AnimatePresence>
+                {isMoreDropdownOpen && (
+                  <motion.div
+                    className="more-dropdown-menu"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {dropdownMenuItemsMobile.map((item: PermissionDetails) => (
+                      <NavLink
+                        to={`/${item.path}`}
+                        key={`mobile-dropdown-${item.id}`}
+                        className={({ isActive }) =>
+                          `dropdown-item-custom ${isActive ? "active" : ""}`
+                        }
+                        onClick={() => setIsMoreDropdownOpen(false)} // Close dropdown on click
+                      >
+                        <i
+                          className={`bx ${
+                            activeItem === item.moduleName ? "bxs" : "bx"
+                          }-${item.menuIcon}`}
+                        ></i>
+                        <span>{item.moduleName}</span>
+                      </NavLink>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
+
+          {/* If there are less than 2 menu items and no dropdown, add a placeholder or adjust flex for the remaining items + logout */}
+          {/* This ensures 4 slots are conceptually filled or spaced correctly */}
+          {menuItems.length < 2 && dropdownMenuItemsMobile.length === 0 && (
+            <div className="text-center py-2 flex-fill mobile-nav-item"></div>
+          )}
+          {menuItems.length < 1 && dropdownMenuItemsMobile.length === 0 && (
+            <div className="text-center py-2 flex-fill mobile-nav-item"></div>
+          )}
+
           {/* Logout Button */}
           <NavLink
             to={logoutItem.path}
-            key={logoutItem.id}
+            key={`mobile-${logoutItem.id}`}
             className={({ isActive }) =>
-              `text-center py-2 flex-fill ${isActive ? "active" : ""}`
+              `text-center py-2 flex-fill mobile-nav-item ${
+                isActive ? "active" : ""
+              }`
             }
             onClick={handleLogout}
           >

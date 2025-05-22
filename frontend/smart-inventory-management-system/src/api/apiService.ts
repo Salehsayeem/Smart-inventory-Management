@@ -1,4 +1,4 @@
-import { ApiResponse } from '../types';
+import { ApiResponse, ProfileType, UpdateProfileRequest } from '../types';
 import { removeTokenFromCookie } from '../utils/cookieUtils';
 import { showError, showSuccess } from '../utils/toastService';
 import axios from './axiosConfig';
@@ -38,4 +38,18 @@ export const apiService = {
 
   delete: <T>(url: string) =>
     handleResponse<T>(axios.delete(url)),
+};
+
+
+export const getUserProfile = async (userId: string): Promise<ProfileType> => {
+  return await apiService.get<ProfileType>(`/auth/profile?userId=${encodeURIComponent(userId)}`);
+};
+
+export const updateUserProfile = async (
+  data: UpdateProfileRequest
+): Promise<string> => {
+  return await apiService.put<string, UpdateProfileRequest>(
+    "/auth/updateProfile",
+    data
+  );
 };

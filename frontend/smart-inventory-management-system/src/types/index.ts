@@ -1,8 +1,9 @@
+
 export interface JwtPayload {
   sub: string;
   email: string;
   name: string;
-  Shop: any[];
+  Shops: RegisteredShops[];
   Role: string;
   Permissions: Permissions;
   nbf: number;
@@ -12,41 +13,26 @@ export interface JwtPayload {
   aud: string;
 }
 export interface Permissions {
-  UserId: string;
-  RoleId: number;
-  RoleName: string;
-  PermissionDetails: any[];
+  userId: string;
+  roleId: number;
+  roleName: string;
+  permissionDetails: any[];
 }
 
 export interface PermissionDetails {
-  Id: number;
-  ModuleId: number;
-  ModuleName: string;
-  MenuIcon: string;
-  Path: string;
-  IsCreate: boolean;
-  IsView: boolean;
-  IsEdit: boolean;
-  IsList: boolean;
-  IsDelete: boolean;
-  IsActive: boolean;
+  id: number;
+  moduleId: number;
+  moduleName: string;
+  menuIcon: string;
+  path: string;
+  isCreate: boolean;
+  isView: boolean;
+  isEdit: boolean;
+  isList: boolean;
+  isDelete: boolean;
+  isActive: boolean;
 }
 
-
-
-export interface JwtPayload {
-  sub: string;
-  email: string;
-  name: string;
-  Shop: any[];
-  Role: string;
-  Permissions: Permissions;
-  nbf: number;
-  exp: number;
-  iat: number;
-  iss: string;
-  aud: string;
-}
 
 export interface LoginRequest {
   email: string;
@@ -58,6 +44,23 @@ export interface SignupRequest {
   confirmPassword: string;
   businessName: string;
 }
+export interface RegisteredShops {
+  id: number;
+  name: string;
+  address: string;
+}
+export interface ProfileType {
+  id: string;
+  fullName: string;
+  email: string;
+  roleName: string;
+  registeredShops: RegisteredShops[];
+}
+export interface UpdateProfileRequest {
+  id: string;
+  fullName: string;
+}
+
 export interface ApiResponse<T> {
   statusCode: number;
   message: string;

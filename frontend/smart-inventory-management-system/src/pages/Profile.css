@@ -1,16 +1,11 @@
-.profile-container {
-  padding: 1rem;
-  background: #fff;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  margin-top: 1rem;
-}
+
 
 .profile-info {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
+
 
 .info-item {
   display: flex;
@@ -91,4 +86,29 @@
 .settings-description {
   color: var(--color-text-light);
   font-size: 0.9rem;
-} 
+}
+
+.dashboard-card {
+  width: 350px;   
+  height: 350px;         
+  min-width: 300px;
+  min-height: 250px;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;      
+  margin: 16px;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}

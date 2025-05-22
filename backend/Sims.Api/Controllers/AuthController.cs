@@ -86,7 +86,9 @@ namespace Sims.Api.Controllers
         {
             try
             {
-                var currentUserId = Ulid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+               
+                var currentUserId = CommonHelper.StringToUlidConverter(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
                 if (currentUserId == Ulid.Empty)
                 {
                     return new CommonResponseDto()
@@ -96,7 +98,7 @@ namespace Sims.Api.Controllers
                         StatusCode = 403,
                     };
                 }
-                if (currentUserId != model.Id)
+                if (currentUserId != CommonHelper.StringToUlidConverter(model.Id!))
                 {
                     return new CommonResponseDto()
                     {

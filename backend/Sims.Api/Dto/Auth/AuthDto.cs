@@ -27,12 +27,18 @@ namespace Sims.Api.Dto.AuthDto
         public string FullName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string RoleName { get; set; } = string.Empty;
+        public List<RegisteredShopsDto> RegisteredShops { get; set; } = new List<RegisteredShopsDto>();
     }
+    
     public class UpdateProfileDto
     {
-        public Ulid Id { get; set; }
+        public string Id { get; set; }
         public string FullName { get; set; } = string.Empty;
     }
-
-
+    public class RegisteredShopsDto
+    {
+        public long Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
+    }
 }

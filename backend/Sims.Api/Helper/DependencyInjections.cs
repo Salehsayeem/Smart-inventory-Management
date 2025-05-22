@@ -8,6 +8,7 @@ namespace Sims.Api.Helper
         public static IServiceCollection AddDependencyInjections(this IServiceCollection services)
         {
             services.AddTransient<IAuthRepository, AuthRepository>();
+            services.AddTransient<IShopRepository, ShopRepository>();
             return services;
         }
     }
