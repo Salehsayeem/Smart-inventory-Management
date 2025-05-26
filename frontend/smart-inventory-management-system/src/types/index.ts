@@ -60,7 +60,11 @@ export interface UpdateProfileRequest {
   id: string;
   fullName: string;
 }
-
+export interface CreateOrUpdateShopDto{
+  id: number;
+  name: string;
+  address: string;
+}
 export interface ApiResponse<T> {
   statusCode: number;
   message: string;

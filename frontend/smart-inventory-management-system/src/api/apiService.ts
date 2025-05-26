@@ -1,4 +1,4 @@
-import { ApiResponse, ProfileType, UpdateProfileRequest } from '../types';
+import { ApiResponse, CreateOrUpdateShopDto, ProfileType, UpdateProfileRequest } from '../types';
 import { removeTokenFromCookie } from '../utils/cookieUtils';
 import { showError, showSuccess } from '../utils/toastService';
 import axios from './axiosConfig';
@@ -40,7 +40,7 @@ export const apiService = {
     handleResponse<T>(axios.delete(url)),
 };
 
-
+//#region Authentication APIs
 export const getUserProfile = async (userId: string): Promise<ProfileType> => {
   return await apiService.get<ProfileType>(`/auth/profile?userId=${encodeURIComponent(userId)}`);
 };
@@ -50,6 +50,21 @@ export const updateUserProfile = async (
 ): Promise<string> => {
   return await apiService.put<string, UpdateProfileRequest>(
     "/auth/updateProfile",
+    data
+  );
+};
+
+//#endregion
+
+//#region Shop APIs
+export const getShops = async (): Promise<ProfileType['registeredShops']> => {
+  return await apiService.get<ProfileType['registeredShops']>('/shop/getShops');
+};
+export const createOrUpdateShop = async (
+  data: CreateOrUpdateShopDto
+): Promise<string> => {
+  return await apiService.post<string, CreateOrUpdateShopDto>(
+    '/shop/createOrUpdateShop',
     data
   );
 };

@@ -8,9 +8,6 @@ export const setTokenInCookie = (token: string) => {
     const decoded = jwtDecode<JwtPayload>(token);
     const expirationDate = new Date(decoded.exp * 1000);
     Cookies.set('token', token, { expires: expirationDate });
-    console.log('before keysToCamel', decoded.Permissions);
-    console.log('after keysToCamel', keysToCamel<Permissions[]>(decoded.Permissions));
-    console.log('after json stringfy keysToCamel', JSON.stringify(keysToCamel<Permissions[]>(decoded.Permissions)));
     Cookies.set('permissions', JSON.stringify(keysToCamel(decoded.Permissions)), { expires: expirationDate });
   } catch (error) {
     console.error('Error setting token in cookie:', error);
@@ -21,6 +18,7 @@ export const setSelectedShopInCookie = (shopId: number) => {
 }
 export const getSelectedShopFromCookie = () => {
   const selectedShop = Cookies.get('selectedShop');
+  console.log('Selected shop from cookie:', selectedShop);
   return selectedShop;
 };
 

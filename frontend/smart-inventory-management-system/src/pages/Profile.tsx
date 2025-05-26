@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./Profile.css";
-import { getUserProfile, updateUserProfile } from "../api/apiService";
+import { createOrUpdateShop, getUserProfile, updateUserProfile } from "../api/apiService";
 import { getUserIdFromToken } from "../utils/cookieUtils";
 import { ProfileType, RegisteredShops } from "../types";
 import EditableField from "../components/editable-input-field/EditableField";
 import GenericModal from "../components/modal/Modal";
+import CustomFormComponent, { FormInputConfig } from "../components/customFormComponent/CustomFormComponent";
 
 const Profile: React.FC = () => {
   const [profile, setProfile] = useState<ProfileType | null>(null);
@@ -12,6 +13,8 @@ const Profile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [fullName, setFullName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [shopForm, setShopForm] = useState({ name: "", address: "" });
+
 
   useEffect(() => {
     fetchProfile();
@@ -23,10 +26,10 @@ const Profile: React.FC = () => {
         const userProfile = await getUserProfile(userId);
         const mapUserShop = Array.isArray(userProfile.registeredShops)
           ? userProfile.registeredShops.map((shop: any) => ({
-              id: shop.id,
-              name: shop.name,
-              address: shop.address,
-            }))
+            id: shop.id,
+            name: shop.name,
+            address: shop.address,
+          }))
           : [];
         setShops(mapUserShop);
         setProfile(userProfile);
@@ -49,6 +52,41 @@ const Profile: React.FC = () => {
       console.error("Update failed", err);
     }
   };
+  const handleShopInputChange = (field: keyof typeof shopForm) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setShopForm({ ...shopForm, [field]: e.target.value });
+  };
+  const handleAddShop = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await createOrUpdateShop({ ...shopForm, id: 0 });
+      fetchProfile();
+      setIsModalOpen(false);
+      setShopForm({ name: "", address: "" });
+    } catch (err) {
+      console.error("Failed to add shop", err);
+    }
+  };
+
+  const shopInputs: FormInputConfig[] = [
+    {
+      id: "shopName",
+      label: "Shop Name",
+      type: "text",
+      value: shopForm.name,
+      required: true,
+      placeholder: "Enter shop name",
+      onChange: handleShopInputChange("name"),
+    },
+    {
+      id: "shopAddress",
+      label: "Address",
+      type: "text",
+      value: shopForm.address,
+      required: true,
+      placeholder: "Enter address",
+      onChange: handleShopInputChange("address"),
+    },
+  ];
   return (
     <div className="dashboard-container">
       <h1>Profile</h1>
@@ -237,12 +275,14 @@ const Profile: React.FC = () => {
         show={isModalOpen}
         title="Add Shop"
         onClose={() => setIsModalOpen(false)}
-
       >
-        {/* Place your add shop form or content here */}
-        <div>
-          <p>Add shop form goes here.</p>
-        </div>
+        <CustomFormComponent
+          inputs={shopInputs}
+          onSubmit={handleAddShop}
+          onCancel={() => setIsModalOpen(false)}
+          submitLabel="Save"
+          cancelLabel="Cancel"
+        />
       </GenericModal>
     </div>
   );
