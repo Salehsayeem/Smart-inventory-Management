@@ -48,21 +48,34 @@ const UserManagement: React.FC = () => {
   const masterCheckboxRef = useRef<HTMLInputElement>(null);
   const rowCheckboxRefs = useRef<(HTMLInputElement | null)[]>([]);
 
+  // Fetch users only once on mount
   useEffect(() => {
     fetchUsers();
+    // eslint-disable-next-line
+  }, []);
+
+  // Sync editablePermissions when permissions change
+  useEffect(() => {
     setEditablePermissions(JSON.parse(JSON.stringify(permissions)));
   }, [permissions]);
 
+  // Indeterminate logic for checkboxes
   useEffect(() => {
     // Master checkbox logic
-    const allChecked = editablePermissions.every((perm) =>
-      PERMISSION_FIELDS.every((field) => perm[field as keyof PermissionDetails])
-    );
-    const noneChecked = editablePermissions.every((perm) =>
-      PERMISSION_FIELDS.every(
-        (field) => !perm[field as keyof PermissionDetails]
-      )
-    );
+    const allChecked =
+      editablePermissions.length > 0 &&
+      editablePermissions.every((perm) =>
+        PERMISSION_FIELDS.every(
+          (field) => perm[field as keyof PermissionDetails]
+        )
+      );
+    const noneChecked =
+      editablePermissions.length > 0 &&
+      editablePermissions.every((perm) =>
+        PERMISSION_FIELDS.every(
+          (field) => !perm[field as keyof PermissionDetails]
+        )
+      );
     if (masterCheckboxRef.current) {
       masterCheckboxRef.current.indeterminate = !allChecked && !noneChecked;
       masterCheckboxRef.current.checked = allChecked;
@@ -82,8 +95,7 @@ const UserManagement: React.FC = () => {
         checkbox.checked = all;
       }
     });
-  }, [editablePermissions]);
-
+  }, [editablePermissions,PERMISSION_FIELDS]);
   const fetchUsers = async () => {
     try {
       const data = await getAllUserOfShop();
@@ -197,7 +209,7 @@ const UserManagement: React.FC = () => {
     <div className="user-mgmt-container">
       <div className="user-mgmt-card">
         <div className="user-mgmt-card-header">
-<h3>User List</h3>
+          <h3>User List</h3>
           <button className="user-mgmt-add-btn" onClick={handleOpenModal}>
             + New
           </button>
