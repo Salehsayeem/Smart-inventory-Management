@@ -1,144 +1,410 @@
-import React from 'react';
-import './UserManagement.css';
+import React, { useEffect, useRef, useState } from "react";
+import "./UserManagement.css";
+import {
+  CreateUserRequest,
+  KeyValuePairDto,
+  PermissionDetails,
+  ProfileType,
+} from "../types";
+import {
+  createUser,
+  deleteUser,
+  getAllUserOfShop,
+  getAvailableRoles,
+  getPermissionsOfUser,
+  updatePermissionsOfUser,
+} from "../api/apiService";
+import GenericModal from "../components/modal/Modal";
+import CustomFormComponent, {
+  FormInputConfig,
+} from "../components/customFormComponent/CustomFormComponent";
 
 const UserManagement: React.FC = () => {
+  const [users, setUsers] = useState<ProfileType[]>([]);
+  const [permissions, setPermissions] = useState<PermissionDetails[]>([]);
+  const [roles, setRoles] = useState<KeyValuePairDto[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form, setForm] = useState<CreateUserRequest>({
+    fullName: "",
+    email: "",
+    roleId: 0,
+    shopId: 0,
+  });
+  const [isPermissionModalOpen, setIsPermissionModalOpen] = useState(false);
+  const [editablePermissions, setEditablePermissions] = useState<
+    PermissionDetails[]
+  >([]);
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
+  const PERMISSION_FIELDS = [
+    "isCreate",
+    "isView",
+    "isEdit",
+    "isList",
+    "isDelete",
+  ];
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<string | null>(null);
+
+  const masterCheckboxRef = useRef<HTMLInputElement>(null);
+  const rowCheckboxRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  useEffect(() => {
+    fetchUsers();
+    setEditablePermissions(JSON.parse(JSON.stringify(permissions)));
+  }, [permissions]);
+
+  useEffect(() => {
+    // Master checkbox logic
+    const allChecked = editablePermissions.every((perm) =>
+      PERMISSION_FIELDS.every((field) => perm[field as keyof PermissionDetails])
+    );
+    const noneChecked = editablePermissions.every((perm) =>
+      PERMISSION_FIELDS.every(
+        (field) => !perm[field as keyof PermissionDetails]
+      )
+    );
+    if (masterCheckboxRef.current) {
+      masterCheckboxRef.current.indeterminate = !allChecked && !noneChecked;
+      masterCheckboxRef.current.checked = allChecked;
+    }
+
+    // Row-level checkboxes
+    editablePermissions.forEach((perm, idx) => {
+      const all = PERMISSION_FIELDS.every(
+        (field) => perm[field as keyof PermissionDetails]
+      );
+      const none = PERMISSION_FIELDS.every(
+        (field) => !perm[field as keyof PermissionDetails]
+      );
+      const checkbox = rowCheckboxRefs.current[idx];
+      if (checkbox) {
+        checkbox.indeterminate = !all && !none;
+        checkbox.checked = all;
+      }
+    });
+  }, [editablePermissions]);
+
+  const fetchUsers = async () => {
+    try {
+      const data = await getAllUserOfShop();
+      if (Array.isArray(data)) {
+        setUsers(data);
+      } else {
+        setUsers([]);
+      }
+    } catch (error) {
+      setUsers([]);
+    }
+  };
+
+  const fetchAvailableRoles = async () => {
+    try {
+      const data = await getAvailableRoles();
+      setRoles(data);
+    } catch (error) {
+      console.error("Error fetching roles:", error);
+    }
+  };
+
+  const fetchPermissionsOfUser = async (userId: string) => {
+    try {
+      const data = await getPermissionsOfUser(userId);
+      setPermissions(data);
+    } catch (error) {
+      console.error("Error fetching user permissions:", error);
+    }
+  };
+
+  const handleInputChange =
+    (field: keyof CreateUserRequest) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      setForm({
+        ...form,
+        [field]: field === "roleId" ? Number(e.target.value) : e.target.value,
+      });
+    };
+
+  const handleOpenModal = () => {
+    fetchAvailableRoles();
+    setForm({
+      fullName: "",
+      email: "",
+      roleId: 0,
+      shopId: 0,
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleSaveUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await createUser({ ...form });
+      setIsModalOpen(false);
+      fetchUsers();
+    } catch (error) {
+      console.error("Error creating user:", error);
+    }
+  };
+
+  const handleEditPermissions = async (userId: string) => {
+    setSelectedUserId(userId);
+    await fetchPermissionsOfUser(userId);
+    setIsPermissionModalOpen(true);
+  };
+
+  const handlePermissionCheckboxChange = (
+    permIdx: number,
+    field: keyof PermissionDetails
+  ) => {
+    setEditablePermissions((prev) =>
+      prev.map((perm, idx) =>
+        idx === permIdx ? { ...perm, [field]: !perm[field] } : perm
+      )
+    );
+  };
+
+  const userInputs: FormInputConfig[] = [
+    {
+      id: "fullName",
+      label: "Full Name",
+      type: "text",
+      value: form.fullName,
+      required: true,
+      placeholder: "Enter full name",
+      onChange: handleInputChange("fullName"),
+    },
+    {
+      id: "email",
+      label: "Email",
+      type: "email",
+      value: form.email,
+      required: true,
+      placeholder: "Enter email",
+      onChange: handleInputChange("email"),
+    },
+    {
+      id: "roleId",
+      label: "Role",
+      type: "select",
+      value: String(form.roleId),
+      required: true,
+      options: roles.map((r) => ({ value: String(r.key), label: r.value })),
+      onChange: handleInputChange("roleId"),
+    },
+  ];
+
   return (
-    <div className="dashboard-container">
-      <h1>User Management</h1>
-      <div className="dashboard-grid">
-        {/* Statistics Cards */}
-        <div className="dashboard-card">
-          <div className="card-header">
-            <h3>User Statistics</h3>
-          </div>
-          <div className="statistics-grid">
-            <div className="statistic-item">
-              <div className="statistic-icon">
-                <i className="bx bx-user"></i>
-              </div>
-              <div className="statistic-content">
-                <h4>Total Users</h4>
-                <p className="statistic-value">1,234</p>
-                <span className="statistic-change positive">+12% from last month</span>
-              </div>
-            </div>
-            <div className="statistic-item">
-              <div className="statistic-icon">
-                <i className="bx bx-user-check"></i>
-              </div>
-              <div className="statistic-content">
-                <h4>Active Users</h4>
-                <p className="statistic-value">1,100</p>
-                <span className="statistic-change positive">+8% from last month</span>
-              </div>
-            </div>
-            <div className="statistic-item">
-              <div className="statistic-icon">
-                <i className="bx bx-user-x"></i>
-              </div>
-              <div className="statistic-content">
-                <h4>Inactive Users</h4>
-                <p className="statistic-value">134</p>
-                <span className="statistic-change negative">+3% from last month</span>
-              </div>
-            </div>
-          </div>
+    <div className="user-mgmt-container">
+      <div className="user-mgmt-card">
+        <div className="user-mgmt-card-header">
+<h3>User List</h3>
+          <button className="user-mgmt-add-btn" onClick={handleOpenModal}>
+            + New
+          </button>
         </div>
-
-        {/* User List */}
-        <div className="dashboard-card">
-          <div className="card-header">
-            <h3>User List</h3>
-            <button className="view-all-btn">Add New User</button>
-          </div>
-          <div className="user-list">
-            <div className="user-item">
-              <div className="user-avatar">
-                <img src="https://cdn-icons-png.flaticon.com/512/2202/2202112.png" alt="User" />
-              </div>
-              <div className="user-info">
-                <h4>John Doe</h4>
-                <p>john.doe@example.com</p>
-                <span className="user-role">Administrator</span>
-              </div>
-              <div className="user-status active">Active</div>
-              <div className="user-actions">
-                <button className="action-btn edit"><i className="bx bx-edit"></i></button>
-                <button className="action-btn delete"><i className="bx bx-trash"></i></button>
-              </div>
-            </div>
-            <div className="user-item">
-              <div className="user-avatar">
-                <img src="https://cdn-icons-png.flaticon.com/512/2202/2202112.png" alt="User" />
-              </div>
-              <div className="user-info">
-                <h4>Jane Smith</h4>
-                <p>jane.smith@example.com</p>
-                <span className="user-role">Manager</span>
-              </div>
-              <div className="user-status active">Active</div>
-              <div className="user-actions">
-                <button className="action-btn edit"><i className="bx bx-edit"></i></button>
-                <button className="action-btn delete"><i className="bx bx-trash"></i></button>
-              </div>
-            </div>
-            <div className="user-item">
-              <div className="user-avatar">
-                <img src="https://cdn-icons-png.flaticon.com/512/2202/2202112.png" alt="User" />
-              </div>
-              <div className="user-info">
-                <h4>Mike Johnson</h4>
-                <p>mike.johnson@example.com</p>
-                <span className="user-role">Staff</span>
-              </div>
-              <div className="user-status inactive">Inactive</div>
-              <div className="user-actions">
-                <button className="action-btn edit"><i className="bx bx-edit"></i></button>
-                <button className="action-btn delete"><i className="bx bx-trash"></i></button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Recent Activities */}
-        <div className="dashboard-card">
-          <div className="card-header">
-            <h3>Recent Activities</h3>
-            <button className="view-all-btn">View All</button>
-          </div>
-          <div className="activity-list">
-            <div className="activity-item">
-              <div className="activity-icon">
-                <i className="bx bx-user-plus"></i>
-              </div>
-              <div className="activity-content">
-                <p className="activity-text">New user added: Sarah Wilson</p>
-                <span className="activity-time">2 hours ago</span>
-              </div>
-            </div>
-            <div className="activity-item">
-              <div className="activity-icon">
-                <i className="bx bx-user-x"></i>
-              </div>
-              <div className="activity-content">
-                <p className="activity-text">User deactivated: Mike Johnson</p>
-                <span className="activity-time">5 hours ago</span>
-              </div>
-            </div>
-            <div className="activity-item">
-              <div className="activity-icon">
-                <i className="bx bx-edit"></i>
-              </div>
-              <div className="activity-content">
-                <p className="activity-text">User role updated: Jane Smith</p>
-                <span className="activity-time">1 day ago</span>
-              </div>
-            </div>
-          </div>
+        <div className="user-mgmt-table-responsive">
+          <table className="user-mgmt-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((u) => (
+                <tr key={u.id}>
+                  <td>{u.fullName}</td>
+                  <td>{u.email}</td>
+                  <td>{u.roleName}</td>
+                  <td>
+                    <button
+                      className="user-mgmt-edit-btn"
+                      title="Edit"
+                      onClick={() => handleEditPermissions(u.id)}
+                      style={{ marginRight: "8px" }}
+                    >
+                      <i className="bx bx-edit"></i>
+                    </button>
+                    |
+                    <button
+                      className="user-mgmt-delete-btn"
+                      title="Delete"
+                      onClick={() => {
+                        setUserToDelete(u.id);
+                        setIsDeleteModalOpen(true);
+                      }}
+                      style={{ marginLeft: "8px" }}
+                    >
+                      <i className="bx bx-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
+
+      <GenericModal
+        show={isModalOpen}
+        title="Add User"
+        onClose={() => setIsModalOpen(false)}
+      >
+        <CustomFormComponent
+          inputs={userInputs}
+          onSubmit={handleSaveUser}
+          onCancel={() => setIsModalOpen(false)}
+          submitLabel="Save"
+          cancelLabel="Cancel"
+        />
+      </GenericModal>
+
+      <GenericModal
+        show={isPermissionModalOpen}
+        title="User Permissions"
+        onClose={() => setIsPermissionModalOpen(false)}
+      >
+        <div className="permissions-table-wrapper">
+          <table className="permissions-table">
+            <thead>
+              <tr>
+                <th>
+                  <input
+                    type="checkbox"
+                    ref={masterCheckboxRef}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      setEditablePermissions((prev) =>
+                        prev.map((perm) => {
+                          const updated: PermissionDetails = { ...perm };
+                          PERMISSION_FIELDS.forEach((field) => {
+                            (updated as any)[field] = checked;
+                          });
+                          return updated;
+                        })
+                      );
+                    }}
+                  />
+                </th>
+                <th>Module</th>
+                {PERMISSION_FIELDS.map((field) => (
+                  <th key={field}>{field.replace("is", "")}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {editablePermissions.map((perm, permIdx) => (
+                <tr key={perm.id}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      ref={(el) => {
+                        rowCheckboxRefs.current[permIdx] = el;
+                      }}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        setEditablePermissions((prev) =>
+                          prev.map((p, idx) => {
+                            if (idx === permIdx) {
+                              const updated = { ...p };
+                              PERMISSION_FIELDS.forEach((field) => {
+                                (updated as any)[field] = checked;
+                              });
+                              return updated;
+                            }
+                            return p;
+                          })
+                        );
+                      }}
+                    />
+                  </td>
+                  <td>{perm.moduleName}</td>
+                  {PERMISSION_FIELDS.map((field) => (
+                    <td key={field}>
+                      <input
+                        type="checkbox"
+                        checked={
+                          perm[field as keyof PermissionDetails] as boolean
+                        }
+                        onChange={() =>
+                          handlePermissionCheckboxChange(
+                            permIdx,
+                            field as keyof PermissionDetails
+                          )
+                        }
+                      />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="d-flex justify-content-end">
+            <button
+              className="btn btn-primary mt-3"
+              onClick={async () => {
+                try {
+                  const payload = editablePermissions.map((perm) => ({
+                    id: perm.id,
+                    isCreate: !!perm.isCreate,
+                    isView: !!perm.isView,
+                    isEdit: !!perm.isEdit,
+                    isList: !!perm.isList,
+                    isDelete: !!perm.isDelete,
+                  }));
+                  await updatePermissionsOfUser(selectedUserId, payload);
+                  setIsPermissionModalOpen(false);
+                } catch (error) {
+                  console.error("Failed to update permissions", error);
+                }
+              }}
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </GenericModal>
+
+      <GenericModal
+        show={isDeleteModalOpen}
+        title="Confirm Delete"
+        onClose={() => setIsDeleteModalOpen(false)}
+      >
+        <div>
+          <p>Are you sure you want to delete this user?</p>
+          <div className="d-flex justify-content-end">
+            <button
+              className="btn btn-secondary me-2"
+              onClick={() => setIsDeleteModalOpen(false)}
+            >
+              Cancel
+            </button>
+            <button
+              className="btn btn-danger"
+              onClick={async () => {
+                if (userToDelete) {
+                  try {
+                    await deleteUser(userToDelete);
+                    setIsDeleteModalOpen(false);
+                    setUserToDelete(null);
+                    fetchUsers();
+                  } catch (error) {
+                    // Optionally show error
+                    setIsDeleteModalOpen(false);
+                    setUserToDelete(null);
+                  }
+                }
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </GenericModal>
     </div>
   );
 };
 
-export default UserManagement; 
+export default UserManagement;

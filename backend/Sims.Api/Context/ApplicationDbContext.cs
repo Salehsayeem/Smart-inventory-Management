@@ -13,6 +13,7 @@ namespace Sims.Api.Context
         }
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Shop> Shops { get; set; } = null!;
+        public DbSet<UserShop> UserShops { get; set; } = null!;
         public DbSet<StockMovement> StockMovements { get; set; } = null!;
         public DbSet<PurchaseOrderItem> PurchaseOrderItems { get; set; } = null!;
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; } = null!;
@@ -37,6 +38,9 @@ namespace Sims.Api.Context
 
             modelBuilder.Entity<Module>()
                 .HasIndex(m => m.Name)
+                .IsUnique();
+            modelBuilder.Entity<UserShop>()
+                .HasIndex(us => new { us.UserId, us.ShopId })
                 .IsUnique();
 
             modelBuilder.Entity<Module>().HasData(

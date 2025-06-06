@@ -41,4 +41,14 @@ namespace Sims.Api.Dto.AuthDto
         public string Name { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
     }
+
+    public class CreateUserDto
+    {
+        public string FullName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public int RoleId { get; set; }
+        public long ShopId { get; set; }
+    }
+
+   
 }

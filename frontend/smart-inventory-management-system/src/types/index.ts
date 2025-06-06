@@ -32,7 +32,14 @@ export interface PermissionDetails {
   isDelete: boolean;
   isActive: boolean;
 }
-
+export interface UpdatePermissionsRequest {
+  id: number;
+  isCreate: boolean;
+  isView: boolean;
+  isEdit: boolean;
+  isList: boolean;
+  isDelete: boolean;
+}
 
 export interface LoginRequest {
   email: string;
@@ -56,11 +63,21 @@ export interface ProfileType {
   roleName: string;
   registeredShops: RegisteredShops[];
 }
+export interface CreateUserRequest {
+  fullName: string;
+  email: string;
+  roleId: number;
+  shopId: number;
+}
+export interface KeyValuePairDto {
+  key: number;
+  value: string;
+}
 export interface UpdateProfileRequest {
   id: string;
   fullName: string;
 }
-export interface CreateOrUpdateShopDto{
+export interface CreateOrUpdateShopDto {
   id: number;
   name: string;
   address: string;

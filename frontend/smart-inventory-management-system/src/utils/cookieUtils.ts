@@ -13,13 +13,22 @@ export const setTokenInCookie = (token: string) => {
     console.error('Error setting token in cookie:', error);
   }
 };
-export const setSelectedShopInCookie = (shopId: number) => {
-  Cookies.set('selectedShop', String(shopId));
+
+export const firstShopIdOnLogin = (token: string) => {
+  const decoded = jwtDecode<JwtPayload>(token);
+  const expirationDate = new Date(decoded.exp * 1000);
+  const parsedShops = JSON.parse(keysToCamel(decoded.Shops)) as any;
+  Cookies.set('shopId', parsedShops[0].Id, { expires: expirationDate });
 }
-export const getSelectedShopFromCookie = () => {
-  const selectedShop = Cookies.get('selectedShop');
-  console.log('Selected shop from cookie:', selectedShop);
-  return selectedShop;
+
+export const setSelectedShopInCookie = (shopId: number | undefined) => {
+   if (shopId !== undefined && shopId !== null) {
+    Cookies.set('shopId', String(shopId));
+  }
+}
+export const getSelectedShopFromCookie = (): number => {
+  const selectedShop = Cookies.get('shopId');
+  return selectedShop ? parseInt(selectedShop, 10) : 0;
 };
 
 export const getTokenFromCookie = () => {
@@ -37,10 +46,23 @@ export const getPermissionsFromCookie = (): Permissions | undefined => {
   }
 };
 
+export const getRoleIdFromCookie = (): number | undefined => {
+  try {
+    const permissions = getPermissionsFromCookie();
+    if (typeof permissions === "string") {
+      const parse = JSON.parse(permissions);
+      return parse.RoleId;
+    }
+  } catch (error) {
+    console.error('Error parsing permissions from cookie:', error);
+    return undefined;
+  }
+};
+
 export const removeTokenFromCookie = () => {
   Cookies.remove('token');
   Cookies.remove('permissions');
-  Cookies.remove('selectedShop');
+  Cookies.remove('shopId');
 };
 
 export const isTokenExpired = (token: string): boolean => {
@@ -62,7 +84,7 @@ export const checkTokenExpiration = () => {
   return true;
 };
 
-export const getUserIdFromToken = () : string | null => {
+export const getUserIdFromToken = (): string | null => {
   const token = getTokenFromCookie();
   if (!token) return null;
   try {

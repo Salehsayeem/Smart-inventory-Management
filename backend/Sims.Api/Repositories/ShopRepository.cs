@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Sims.Api.Context;
 using Sims.Api.Dto;
 using Sims.Api.Dto.Shop;
@@ -22,27 +18,34 @@ namespace Sims.Api.Repositories
         {
             try
             {
-                var shop = new Shop()
-                {
-                    Id = model.Id,
-                    Name = model.Name,
-                    Address = model.Address,
-                };
                 if (model.Id == 0)
                 {
-                    shop.CreatedBy = userId;
-                    await _context.Shops.AddAsync(shop);
+                    var data = new Shop()
+                    {
+                        Id = model.Id,
+                        Name = model.Name,
+                        Address = model.Address,
+                        CreatedBy = userId
+                    };
+                    await _context.Shops.AddAsync(data);
                 }
                 else
                 {
-                    shop.ModifiedBy = userId;
-                    _context.Shops.Update(shop);
+                    var existingData = await _context.Shops.FindAsync(model.Id);
+                    if (existingData != null)
+                    {
+                        existingData.Name = model.Name;
+                        existingData.Address = model.Address;
+                        existingData.ModifiedBy = userId;
+                        existingData.ModifiedAt = DateTime.UtcNow;
+                        _context.Shops.Update(existingData);
+                    }
                 }
                 await _context.SaveChangesAsync();
                 return new CommonResponseDto()
                 {
-                    Message = "Shop created/updated successfully",
-                    Data = shop,
+                    Message = model.Id == 0? $"{model.Name}  created successfully": $"{model.Name} updated successfully",
+                    Data = null,
                     StatusCode = 200,
                 };
             }
@@ -52,11 +55,11 @@ namespace Sims.Api.Repositories
             }
         }
 
-        public async Task<CommonResponseDto> GetShopById(GetShopByIdDto model)
+        public async Task<CommonResponseDto> GetShopById(long shopId)
         {
             try
             {
-                var shop = await _context.Shops.FindAsync(model.Id);
+                var shop = await _context.Shops.FindAsync(shopId);
                 if (shop == null)
                 {
                     return new CommonResponseDto()
@@ -95,6 +98,7 @@ namespace Sims.Api.Repositories
                 }
                 data.IsActive = false;
                 data.ModifiedBy = userId;
+                data.ModifiedAt = DateTime.UtcNow;
                 _context.Shops.Update(data);
                 await _context.SaveChangesAsync();
                 return new CommonResponseDto()

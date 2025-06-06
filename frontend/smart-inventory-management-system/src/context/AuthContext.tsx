@@ -5,7 +5,7 @@ import { showError } from '../utils/toastService';
 import { LoginRequest, SignupRequest, JwtPayload,  RegisteredShops } from '../types';
 import { apiService } from '../api/apiService';
 import { jwtDecode } from 'jwt-decode';
-import { setTokenInCookie, getTokenFromCookie, removeTokenFromCookie } from '../utils/cookieUtils';
+import { setTokenInCookie,firstShopIdOnLogin, getTokenFromCookie, removeTokenFromCookie } from '../utils/cookieUtils';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -97,6 +97,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       const token = response;
       setTokenInCookie(token);
+      firstShopIdOnLogin(token);
       updateAuthState(token);
       return true;
     } catch (error: any) {
@@ -120,6 +121,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       const token = response;
       setTokenInCookie(token);
+      firstShopIdOnLogin(token);
       updateAuthState(token);
       return true;
     } catch (error: any) {

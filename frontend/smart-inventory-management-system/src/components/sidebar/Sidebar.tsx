@@ -40,7 +40,6 @@ const Sidebar: React.FC = () => {
         permissionDetails = keysToCamel(permissionDetails);
         if (permissionDetails.length > 0) {
           setMenuItems(permissionDetails);
-
         }
       } catch (error) {
         console.error("Error parsing permissions:", error);
@@ -48,7 +47,6 @@ const Sidebar: React.FC = () => {
     }
     try {
       if (userInfo?.shops) {
-
         let parsedShops =
           typeof userInfo.shops === "string"
             ? JSON.parse(userInfo.shops)
@@ -82,11 +80,11 @@ const Sidebar: React.FC = () => {
   };
 
   const handleShopSelect = (shopId: number) => {
-    const shop = userInfo?.shops.find((s) => s.id === shopId);
+    const shop = shops.find((s) => s.id === shopId);
     if (shop) {
       setSelectedShop(shop);
       setIsShopDropdownOpen(false);
-      setSelectedShopInCookie(userInfo!.shops[0].id);
+      setSelectedShopInCookie(shop.id);
     }
   };
 
@@ -95,8 +93,9 @@ const Sidebar: React.FC = () => {
   return (
     <>
       <motion.div
-        className={`sidebar-custom d-none d-md-flex flex-column align-items-center ${isOpen ? "expanded" : "collapsed"
-          }`}
+        className={`sidebar-custom d-none d-md-flex flex-column align-items-center ${
+          isOpen ? "expanded" : "collapsed"
+        }`}
         initial={false}
         animate={{ width: isOpen ? 280 : 80 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -139,10 +138,10 @@ const Sidebar: React.FC = () => {
                   >
                     {Array.isArray(shops)
                       ? shops.map((shop) => (
-                        <option key={`shop-${shop.id}`} value={shop.id}>
-                          {shop.name}
-                        </option>
-                      ))
+                          <option key={`shop-${shop.id}`} value={shop.id}>
+                            {shop.name}
+                          </option>
+                        ))
                       : null}
                   </select>
                 </div>
@@ -159,15 +158,17 @@ const Sidebar: React.FC = () => {
                 to={`/${item.path}`}
                 key={item.id}
                 className={({ isActive }) =>
-                  `sidebar-item-custom my-1 ${isActive ? "active" : ""} ${isOpen ? "expanded" : "collapsed"
+                  `sidebar-item-custom my-1 ${isActive ? "active" : ""} ${
+                    isOpen ? "expanded" : "collapsed"
                   }`
                 }
                 style={{ textDecoration: "none" }}
               >
                 <div className="sidebar-icon-wrap">
                   <i
-                    className={`bx ${activeItem === item.moduleName ? "bxs" : "bx"
-                      }-${item.menuIcon}`}
+                    className={`bx ${
+                      activeItem === item.moduleName ? "bxs" : "bx"
+                    }-${item.menuIcon}`}
                   ></i>
                 </div>
                 <AnimatePresence>
@@ -189,8 +190,9 @@ const Sidebar: React.FC = () => {
           {/* Logout Option */}
           <button
             onClick={handleLogout}
-            className={`sidebar-item-custom my-1 sidebar-logout ${isOpen ? "expanded" : "collapsed"
-              }`}
+            className={`sidebar-item-custom my-1 sidebar-logout ${
+              isOpen ? "expanded" : "collapsed"
+            }`}
             style={{
               textDecoration: "none",
               border: "none",
@@ -200,8 +202,9 @@ const Sidebar: React.FC = () => {
           >
             <div className="sidebar-icon-wrap">
               <i
-                className={`bx ${activeItem === logoutItem.label ? "bxs" : "bx"
-                  }-${logoutItem.icon}`}
+                className={`bx ${
+                  activeItem === logoutItem.label ? "bxs" : "bx"
+                }-${logoutItem.icon}`}
               ></i>
             </div>
             <AnimatePresence>
@@ -223,8 +226,9 @@ const Sidebar: React.FC = () => {
         {/* Bottom Part: Collapsible Icon */}
         <div className="sidebar-bottom-part">
           <button
-            className={`sidebar-toggle-btn-custom ${!isOpen ? "collapsed" : ""
-              }`}
+            className={`sidebar-toggle-btn-custom ${
+              !isOpen ? "collapsed" : ""
+            }`}
             onClick={() => setIsOpen((prev) => !prev)}
           >
             <i className={`bx bx-chevron-${isOpen ? "left" : "right"}`}></i>
@@ -240,10 +244,10 @@ const Sidebar: React.FC = () => {
         >
           {Array.isArray(shops)
             ? shops.map((shop) => (
-              <option key={`shop-${shop.id}`} value={shop.id}>
-                {shop.name}
-              </option>
-            ))
+                <option key={`shop-${shop.id}`} value={shop.id}>
+                  {shop.name}
+                </option>
+              ))
             : null}
         </select>
       </div>
@@ -259,13 +263,15 @@ const Sidebar: React.FC = () => {
               to={`/${item.path}`}
               key={`mobile-${item.id}`}
               className={({ isActive }) =>
-                `text-center py-2 flex-fill mobile-nav-item ${isActive ? "active" : ""
+                `text-center py-2 flex-fill mobile-nav-item ${
+                  isActive ? "active" : ""
                 }`
               }
             >
               <i
-                className={`bx ${activeItem === item.moduleName ? "bxs" : "bx"
-                  }-${item.menuIcon}`}
+                className={`bx ${
+                  activeItem === item.moduleName ? "bxs" : "bx"
+                }-${item.menuIcon}`}
               ></i>
             </NavLink>
           ))}
@@ -298,8 +304,9 @@ const Sidebar: React.FC = () => {
                         onClick={() => setIsMoreDropdownOpen(false)} // Close dropdown on click
                       >
                         <i
-                          className={`bx ${activeItem === item.moduleName ? "bxs" : "bx"
-                            }-${item.menuIcon}`}
+                          className={`bx ${
+                            activeItem === item.moduleName ? "bxs" : "bx"
+                          }-${item.menuIcon}`}
                         ></i>
                         <span>{item.moduleName}</span>
                       </NavLink>
@@ -324,14 +331,16 @@ const Sidebar: React.FC = () => {
             to={logoutItem.path}
             key={`mobile-${logoutItem.id}`}
             className={({ isActive }) =>
-              `text-center py-2 flex-fill mobile-nav-item ${isActive ? "active" : ""
+              `text-center py-2 flex-fill mobile-nav-item ${
+                isActive ? "active" : ""
               }`
             }
             onClick={handleLogout}
           >
             <i
-              className={`bx ${activeItem === logoutItem.label ? "bxs" : "bx"
-                }-${logoutItem.icon}`}
+              className={`bx ${
+                activeItem === logoutItem.label ? "bxs" : "bx"
+              }-${logoutItem.icon}`}
             ></i>
           </NavLink>
         </Nav>

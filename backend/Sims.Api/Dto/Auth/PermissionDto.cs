@@ -21,4 +21,13 @@
         public bool IsDelete { get; set; }
         public bool IsActive { get; set; }
     }
+    public class UpdatePermissionOfUserDto
+    {
+        public long Id { get; set; }
+        public bool IsCreate { get; set; }
+        public bool IsView { get; set; }
+        public bool IsEdit { get; set; }
+        public bool IsList { get; set; }
+        public bool IsDelete { get; set; }
+    }
 }
