@@ -5,7 +5,7 @@ namespace Sims.Api.Models
     public class ForecastData
     {
         [Key]
-        public Ulid Id { get; set; }
+        public long Id { get; set; }
 
         [Required]
         public long ShopId { get; set; }
@@ -14,7 +14,7 @@ namespace Sims.Api.Models
         public long ProductId { get; set; }
 
         [Required]
-        public string LocationId { get; set; } = string.Empty;
+        public long LocationId { get; set; }
 
         [Required]
         public DateTime ForecastDate { get; set; }

@@ -72,7 +72,7 @@ namespace Sims.Api.Helper
                 {
                     OnTokenValidated = context =>
                     {
-                        Console.WriteLine($"Validated claims: {string.Join(", ", context.Principal.Claims.Select(c => $"{c.Type}={c.Value}"))}");
+                        Console.WriteLine($"Validated claims: {string.Join(", ", context.Principal!.Claims.Select(c => $"{c.Type}={c.Value}"))}");
                         return Task.CompletedTask;
                     },
                     OnAuthenticationFailed = context =>

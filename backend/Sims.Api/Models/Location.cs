@@ -6,7 +6,7 @@ namespace Sims.Api.Models
     public class Location : BaseModel
     {
         [Key]
-        public Ulid Id { get; set; }
+        public long Id { get; set; }
 
         [Required]
         public long ShopId { get; set; }

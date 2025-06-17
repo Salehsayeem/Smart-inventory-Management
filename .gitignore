@@ -6,6 +6,8 @@ backend/**/*.suo
 backend/**/*.userosscache
 backend/**/*.sln.docstates
 backend/.vs/
+backend/Sims.Api/.vs/
+backend/**/.vs/
 backend/**/TestResults/
 backend/**/*.dbmdl
 backend/**/*.log

@@ -6,13 +6,13 @@ namespace Sims.Api.Models
     public class PurchaseOrder : BaseModel
     {
         [Key]
-        public Ulid Id { get; set; }
+        public long Id { get; set; }
 
         [Required]
         public long ShopId { get; set; }
 
         [Required]
-        public string SupplierId { get; set; } = string.Empty;
+        public long SupplierId { get; set; }
 
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 

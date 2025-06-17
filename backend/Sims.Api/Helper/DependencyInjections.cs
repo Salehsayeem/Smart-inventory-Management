@@ -10,6 +10,7 @@ namespace Sims.Api.Helper
             services.AddTransient<IAuthRepository, AuthRepository>();
             services.AddScoped<IShopRepository, ShopRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
             return services;
         }
     }

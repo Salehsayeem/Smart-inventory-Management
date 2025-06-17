@@ -2,25 +2,23 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sims.Api.Dto;
-using Sims.Api.Dto.Category;
-using Sims.Api.Helper;
+using Sims.Api.Dto.Product;
 using Sims.Api.IRepositories;
 
 namespace Sims.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class ProductController : ControllerBase
     {
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly IProductRepository _repository;
 
-        public CategoryController(ICategoryRepository categoryRepository)
+        public ProductController(IProductRepository repository)
         {
-            _categoryRepository = categoryRepository;
+            _repository = repository;
         }
-
-        [HttpPost("CreateOrUpdateCategory")]
-        public async Task<CommonResponseDto> CreateOrUpdateCategory([FromBody] CreateOrUpdateCategoryDto model)
+        [HttpPost("CreateOrUpdateProduct")]
+        public async Task<CommonResponseDto> CreateOrUpdateProduct([FromBody] CreateOrUpdateProductDto model)
         {
             try
             {
@@ -34,43 +32,51 @@ namespace Sims.Api.Controllers
                         StatusCode = 403,
                     };
                 }
-
-                return await _categoryRepository.CreateOrUpdateCategory(model, currentUserId);
+                return await _repository.CreateOrUpdateProduct(model, currentUserId);
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
         }
-
-        [HttpGet("GetCategoryById")]
-        public async Task<CommonResponseDto> GetCategoryById(long categoryId)
+        [HttpGet("GetProductById")]
+        public async Task<CommonResponseDto> GetProductById(long productId)
         {
             try
             {
-                return await _categoryRepository.GetCategoryById(categoryId);
+                return await _repository.GetProductById(productId);
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
         }
-
-        [HttpGet("GetAllCategoriesByShopId")]
-        public CommonResponseDto GetAllCategoriesByShopId(string? search, long shopId, int pageNo, int pageSize)
+        [HttpGet("GetProductByShopId")]
+        public CommonResponseDto GetProductByShopId(string? search, long shopId, int pageNo, int pageSize)
         {
             try
             {
-                return _categoryRepository.GetAllCategoryByShopId(search, shopId, pageNo, pageSize);
+                return _repository.GetProductByShopId(search, shopId, pageNo, pageSize);
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
         }
-
-        [HttpDelete("DeleteCategory")]
-        public CommonResponseDto DeleteCategory(long categoryId)
+        [HttpGet("GetProductByCategoryId")]
+        public CommonResponseDto GetProductByCategoryId(string? search, long shopId, long categoryId, int pageNo, int pageSize)
+        {
+            try
+            {
+                return _repository.GetProductByCategoryId(search, shopId, categoryId, pageNo, pageSize);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+        [HttpDelete("DeleteProduct")]
+        public async Task<CommonResponseDto> DeleteProduct(long productId)
         {
             try
             {
@@ -84,7 +90,7 @@ namespace Sims.Api.Controllers
                         StatusCode = 403,
                     };
                 }
-                return _categoryRepository.DeleteCategory(categoryId, currentUserId).Result;
+                return await _repository.DeleteProduct(productId, currentUserId);
             }
             catch (Exception e)
             {

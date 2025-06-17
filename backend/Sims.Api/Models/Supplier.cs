@@ -6,7 +6,7 @@ namespace Sims.Api.Models
     public class Supplier : BaseModel
     {
         [Key]
-        public Ulid Id { get; set; }
+        public long Id { get; set; }
 
         [Required]
         public long ShopId { get; set; }

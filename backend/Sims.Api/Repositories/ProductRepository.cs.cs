@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sims.Api.Context;
 using Sims.Api.Dto;
-using Sims.Api.Dto.Category;
+using Sims.Api.Dto.Product;
 using Sims.Api.Helper;
 using Sims.Api.IRepositories;
 using Sims.Api.Models;
@@ -9,25 +9,24 @@ using Sims.Api.StoredProcedure;
 
 namespace Sims.Api.Repositories
 {
-    public class CategoryRepository : ICategoryRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly AppSettings _settings;
 
-        public CategoryRepository(ApplicationDbContext context, AppSettings settings)
+        public ProductRepository(ApplicationDbContext context, AppSettings settings)
         {
             _context = context;
             _settings = settings;
         }
-
-        public async Task<CommonResponseDto> CreateOrUpdateCategory(CreateOrUpdateCategoryDto model, Ulid userId)
+        public async Task<CommonResponseDto> CreateOrUpdateProduct(CreateOrUpdateProductDto model, Ulid userId)
         {
             try
             {
                 if (model.Id == 0)
                 {
-                    var exists = await _context.Categories
-                        .AnyAsync(a => a!.ShopId == model.ShopId && a.Name.Trim() == model.Name.Trim() && a.IsActive);
+                    var exists = await _context.Products
+                        .AnyAsync(a => a!.ShopId == model.ShopId && a.CategoryId == model.CategoryId && a.Name.Trim() == model.Name.Trim() && a.IsActive);
                     if (exists)
                     {
                         return new CommonResponseDto
@@ -38,15 +37,18 @@ namespace Sims.Api.Repositories
                         };
                     }
 
-                    var data = new Category
+                    var data = new Product()
                     {
                         Name = model.Name,
                         Description = model.Description,
+                        Sku = model.Sku,
+                        CategoryId = model.CategoryId,
+                        UnitPrice = model.UnitPrice,
                         ShopId = model.ShopId,
                         CreatedBy = userId,
                         IsActive = true
                     };
-                    await _context.Categories.AddAsync(data);
+                    await _context.Products.AddAsync(data);
                     await _context.SaveChangesAsync();
                     return new CommonResponseDto
                     {
@@ -57,9 +59,9 @@ namespace Sims.Api.Repositories
                 }
                 else
                 {
-                    var category = await _context.Categories
-                        .FirstOrDefaultAsync(a => a.Id == model.Id && a.ShopId == model.ShopId && a.IsActive);
-                    if (category == null)
+                    var data = await _context.Products
+                        .FirstOrDefaultAsync(a => a.Id == model.Id && a.ShopId == model.ShopId && a.CategoryId== model.CategoryId && a.IsActive);
+                    if (data == null)
                     {
                         return new CommonResponseDto
                         {
@@ -68,8 +70,8 @@ namespace Sims.Api.Repositories
                             StatusCode = 404
                         };
                     }
-                    var duplicate = await _context.Categories
-                        .AnyAsync(a => a.Id != model.Id && a.ShopId == model.ShopId && a.Name.Trim() == model.Name.Trim() && a.IsActive);
+                    var duplicate = await _context.Products
+                        .AnyAsync(a => a.Id != model.Id && a.ShopId == model.ShopId && a.CategoryId== model.CategoryId && a.Name.Trim() == model.Name.Trim() && a.IsActive);
                     if (duplicate)
                     {
                         return new CommonResponseDto
@@ -80,10 +82,12 @@ namespace Sims.Api.Repositories
                         };
                     }
 
-                    category.Name = model.Name;
-                    category.Description = model.Description;
-                    category.ModifiedBy = userId;
-                    _context.Categories.Update(category);
+                    data.Name = model.Name;
+                    data.Description = model.Description;
+                    data.Sku = model.Sku;
+                    data.UnitPrice = model.UnitPrice;
+                    data.ModifiedBy = userId;
+                    _context.Products.Update(data);
                     await _context.SaveChangesAsync();
                     return new CommonResponseDto
                     {
@@ -99,53 +103,51 @@ namespace Sims.Api.Repositories
             }
         }
 
-        public async Task<CommonResponseDto> GetCategoryById(long categoryId)
+        public async Task<CommonResponseDto> GetProductById(long productId)
         {
             try
             {
-                var category = await _context.Categories
-                    .Where(a => a.Id == categoryId && a.IsActive)
-                    .Select(a => new GetCategoryByIdDto
+                var data = await _context.Products
+                    .Where(a => a.Id == productId && a.IsActive)
+                    .Select(a => new GetProductByIdDto
                     {
                         Id = a.Id,
+                        ShopId = a.ShopId,
                         Name = a.Name,
-                        Description = a.Description!,
-                        ShopId = a.ShopId
+                        Sku = a.Sku,
+                        CategoryId = a.CategoryId,
+                        CategoryName = _context.Categories
+                            .Where(c => c.Id == a.CategoryId && c.IsActive)
+                            .Select(c => c.Name)
+                            .FirstOrDefault(),
+                        Description = a.Description,
+                        UnitPrice = a.UnitPrice
                     })
                     .FirstOrDefaultAsync();
-                if (category == null)
+
+                return new CommonResponseDto()
                 {
-                    return new CommonResponseDto
-                    {
-                        Message = "Category not found.",
-                        Data = null,
-                        StatusCode = 404
-                    };
-                }
-                return new CommonResponseDto
-                {
-                    Message = "Category retrieved successfully.",
-                    Data = category,
+                    Data = data,
+                    Message = "",
                     StatusCode = 200
                 };
             }
-
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
         }
 
-        public CommonResponseDto GetAllCategoryByShopId(string? search, long shopId, int pageNo, int pageSize)
+        public CommonResponseDto GetProductByShopId(string search, long shopId, int pageNo, int pageSize)
         {
             try
             {
                 CallStoredProcedure sp = new CallStoredProcedure();
-                var data = sp.CategoryLandingPagination(search, shopId, pageNo, pageSize, _settings.ConnectionString);
+                var data = sp.AllProductsPagination(search, shopId, pageNo, pageSize, _settings.ConnectionString);
                 return new CommonResponseDto()
                 {
-                    Message = "",
                     Data = data,
+                    Message = "",
                     StatusCode = 200
                 };
             }
@@ -155,29 +157,48 @@ namespace Sims.Api.Repositories
             }
         }
 
-        public async Task<CommonResponseDto> DeleteCategory(long categoryId, Ulid userId)
+        public CommonResponseDto GetProductByCategoryId(string search, long shopId, long categoryId, int pageNo, int pageSize)
         {
             try
             {
-                var category = await _context.Categories
-                    .FirstOrDefaultAsync(a => a.Id == categoryId && a.IsActive);
-                if (category == null)
+                CallStoredProcedure sp = new CallStoredProcedure();
+                var data = sp.AllProductsByCategoryPagination(search, shopId,categoryId, pageNo, pageSize, _settings.ConnectionString);
+                return new CommonResponseDto()
+                {
+                    Data = data,
+                    Message = "",
+                    StatusCode = 200
+                };
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public async Task<CommonResponseDto> DeleteProduct(long productId, Ulid userId)
+        {
+            try
+            {
+                var data = await _context.Products
+                    .FirstOrDefaultAsync(a => a.Id == productId && a.IsActive);
+                if (data == null)
                 {
                     return new CommonResponseDto
                     {
-                        Message = "Category not found.",
+                        Message = "Product not found.",
                         Data = null,
                         StatusCode = 404
                     };
                 }
-                category.IsActive = false;
-                category.ModifiedBy = userId;
-                _context.Categories.Update(category);
+                data.IsActive = false;
+                data.ModifiedBy = userId;
+                _context.Products.Update(data);
                 await _context.SaveChangesAsync();
 
                 return new CommonResponseDto
                 {
-                    Message = "Category deleted successfully.",
+                    Message = "Product deleted successfully.",
                     Data = null,
                     StatusCode = 200
                 };

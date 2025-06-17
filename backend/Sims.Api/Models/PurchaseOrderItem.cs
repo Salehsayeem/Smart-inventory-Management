@@ -7,16 +7,16 @@ namespace Sims.Api.Models
     public class PurchaseOrderItem : BaseModel
     {
         [Key]
-        public Ulid Id { get; set; }
+        public long Id { get; set; }
 
         [Required]
         public long ShopId { get; set; }
 
         [Required]
-        public string PurchaseOrderId { get; set; } = string.Empty;
+        public long PurchaseOrderId { get; set; } 
 
         [Required]
-        public string ProductId { get; set; } = string.Empty;
+        public long ProductId { get; set; } 
 
         [Required]
         public int Quantity { get; set; }

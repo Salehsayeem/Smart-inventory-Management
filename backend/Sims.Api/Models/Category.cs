@@ -6,7 +6,7 @@ namespace Sims.Api.Models
     public class Category : BaseModel
     {
         [Key]
-        public Ulid Id { get; set; }
+        public long Id { get; set; }
 
         [Required]
         [StringLength(100)]

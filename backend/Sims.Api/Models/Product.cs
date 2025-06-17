@@ -7,7 +7,7 @@ namespace Sims.Api.Models
     public class Product : BaseModel
     {
         [Key]
-        public Ulid Id { get; set; }
+        public long Id { get; set; }
 
         [Required]
         public long ShopId { get; set; }
@@ -20,7 +20,7 @@ namespace Sims.Api.Models
         [StringLength(50)]
         public string Sku { get; set; } = string.Empty;
 
-        public string? CategoryId { get; set; }
+        public long CategoryId { get; set; }
 
         public string? Description { get; set; }
 

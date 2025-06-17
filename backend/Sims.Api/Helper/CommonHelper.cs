@@ -65,6 +65,8 @@ namespace Sims.Api.Helper
         public static class StoredProcedureNames
         {
             public static readonly string GetCategoryPagination = "fn_get_categories_pagination";
+            public static readonly string GetAllProductsPagination = "fn_get_all_products_pagination";
+            public static readonly string GetAllProductsByCategoryPagination = "fn_get_all_products_by_category_pagination";
 
         }
     }
