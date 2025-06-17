@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Fragment} from "react";
 
 export interface FormInputConfig {
   id: string;
@@ -28,108 +28,87 @@ const CustomFormComponent: React.FC<CustomFormComponentProps> = ({
   onCancel,
   submitLabel = "Save",
   cancelLabel = "Cancel",
-}) => {
-  return (
-    <form onSubmit={onSubmit}>
-      {inputs.map((input) => {
-        const commonProps = {
-          id: input.id,
-          className: "form-control",
-          value: input.value as string,
-          onChange: input.onChange,
-          required: input.required,
-        };
-
-        const renderInput = () => {
-          switch (input.type) {
-            case "select":
-              return (
-                <select {...commonProps as React.SelectHTMLAttributes<HTMLSelectElement>}>
-                  <option value="">Select {input.label}</option>
-                  {input.options?.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-              );
-
-            case "checkbox":
-              return (
-                <div className="form-check">
-                  <input
-                    type="checkbox"
-                    id={input.id}
-                    checked={input.checked as boolean}
-                    onChange={input.onChange}
-                    className="form-check-input"
-                    required={input.required}
-                  />
-                  <label htmlFor={input.id} className="form-check-label">
-                    {input.label}
-                  </label>
-                </div>
-              );
-
-            case "radio":
-              return (
-                <div>
-                  <label className="form-label d-block mb-1">{input.label}</label>
-                  {input.options?.map((opt) => (
-                    <div className="form-check form-check-inline" key={opt.value}>
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name={input.id}
-                        id={`${input.id}-${opt.value}`}
-                        value={opt.value}
-                        checked={input.value === opt.value}
-                        onChange={input.onChange}
-                        required={input.required}
-                      />
-                      <label className="form-check-label" htmlFor={`${input.id}-${opt.value}`}>
-                        {opt.label}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              );
-
-            default:
-              return (
-                <>
-                  <input
-                    {...commonProps}
-                    type={input.type}
-                    placeholder={input.placeholder}
-                  />
-                  <label htmlFor={input.id}>{input.label}</label>
-                </>
-              );
-          }
-        };
-
-        return (
-          <div className="form-floating mb-3" key={input.id}>
-            {renderInput()}
-          </div>
-        );
-      })}
-
-      <div className="d-flex justify-content-end">
-        <button
-          type="button"
-          className="btn btn-secondary me-2"
-          onClick={onCancel}
-        >
-          {cancelLabel}
-        </button>
-        <button type="submit" className="btn btn-primary">
-          {submitLabel}
-        </button>
+}) => (
+  <form onSubmit={onSubmit}>
+    {inputs.map((input) => (
+      <div className="mb-3" key={input.id} style={{ position: "relative" }}>
+        <label htmlFor={input.id} className="form-label">
+          {input.label}
+        </label>
+        {input.type === "select" ? (
+          <Fragment>
+            <select
+              id={input.id}
+              className="form-select"
+              value={typeof input.value === "boolean" ? (input.value ? "true" : "") : input.value}
+              onChange={input.onChange}
+              required={input.required}
+              style={{
+                appearance: "none",
+                paddingRight: "2.5rem",
+                borderRadius: "0.75rem",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.07)",
+                border: "1px solid #ced4da",
+                transition: "box-shadow 0.2s, border-color 0.2s",
+                minHeight: "44px",
+                fontSize: "1rem",
+                backgroundColor: "#fff",
+              }}
+              onFocus={e => (e.currentTarget.style.boxShadow = "0 0 0 2px #0d6efd33")}
+              onBlur={e => (e.currentTarget.style.boxShadow = "0 1px 4px rgba(0,0,0,0.07)")}
+            >
+              <option value="">Select {input.label}</option>
+              {input.options &&
+                input.options.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+            </select>
+            <span
+              style={{
+                position: "absolute",
+                right: "1.25rem",
+                top: "60%",
+                pointerEvents: "none",
+                transform: "translateY(-50%)",
+                color: "#0d6efd",
+                fontSize: "1.4rem",
+                display: "flex",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <i className="bx bx-chevron-down" style={{ pointerEvents: "none" }}></i>
+            </span>
+          </Fragment>
+        ) : (
+          <input
+            id={input.id}
+            type={input.type}
+            className="form-control"
+            value={typeof input.value === "boolean" ? (input.value ? "true" : "") : input.value}
+            onChange={input.onChange}
+            required={input.required}
+            placeholder={input.placeholder}
+            style={{ borderRadius: "0.75rem", minHeight: "44px", fontSize: "1rem" }}
+          />
+        )}
       </div>
-    </form>
-  );
-};
+    ))}
+    <div className="d-flex justify-content-end">
+      <button
+        type="button"
+        className="btn btn-secondary me-2"
+        onClick={onCancel}
+      >
+        {cancelLabel}
+      </button>
+      <button type="submit" className="btn btn-primary">
+        {submitLabel}
+      </button>
+    </div>
+  </form>
+);
 
 export default CustomFormComponent;

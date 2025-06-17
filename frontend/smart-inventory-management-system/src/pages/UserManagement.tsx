@@ -95,7 +95,7 @@ const UserManagement: React.FC = () => {
         checkbox.checked = all;
       }
     });
-  }, [editablePermissions,PERMISSION_FIELDS]);
+  }, [editablePermissions, PERMISSION_FIELDS]);
   const fetchUsers = async () => {
     try {
       const data = await getAllUserOfShop();
@@ -129,12 +129,12 @@ const UserManagement: React.FC = () => {
 
   const handleInputChange =
     (field: keyof CreateUserRequest) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      setForm({
-        ...form,
-        [field]: field === "roleId" ? Number(e.target.value) : e.target.value,
-      });
-    };
+      (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        setForm({
+          ...form,
+          [field]: field === "roleId" ? Number(e.target.value) : e.target.value,
+        });
+      };
 
   const handleOpenModal = () => {
     fetchAvailableRoles();
@@ -278,7 +278,31 @@ const UserManagement: React.FC = () => {
         title="User Permissions"
         onClose={() => setIsPermissionModalOpen(false)}
       >
+        <div className="d-flex justify-content-end mb-2">
+          <button
+            className="btn btn-primary"
+            onClick={async () => {
+              try {
+                const payload = editablePermissions.map((perm) => ({
+                  id: perm.id,
+                  isCreate: !!perm.isCreate,
+                  isView: !!perm.isView,
+                  isEdit: !!perm.isEdit,
+                  isList: !!perm.isList,
+                  isDelete: !!perm.isDelete,
+                }));
+                await updatePermissionsOfUser(selectedUserId, payload);
+                setIsPermissionModalOpen(false);
+              } catch (error) {
+                console.error("Failed to update permissions", error);
+              }
+            }}
+          >
+            Save
+          </button>
+        </div>
         <div className="permissions-table-wrapper">
+
           <table className="permissions-table">
             <thead>
               <tr>
@@ -353,29 +377,7 @@ const UserManagement: React.FC = () => {
               ))}
             </tbody>
           </table>
-          <div className="d-flex justify-content-end">
-            <button
-              className="btn btn-primary mt-3"
-              onClick={async () => {
-                try {
-                  const payload = editablePermissions.map((perm) => ({
-                    id: perm.id,
-                    isCreate: !!perm.isCreate,
-                    isView: !!perm.isView,
-                    isEdit: !!perm.isEdit,
-                    isList: !!perm.isList,
-                    isDelete: !!perm.isDelete,
-                  }));
-                  await updatePermissionsOfUser(selectedUserId, payload);
-                  setIsPermissionModalOpen(false);
-                } catch (error) {
-                  console.error("Failed to update permissions", error);
-                }
-              }}
-            >
-              Save
-            </button>
-          </div>
+
         </div>
       </GenericModal>
 

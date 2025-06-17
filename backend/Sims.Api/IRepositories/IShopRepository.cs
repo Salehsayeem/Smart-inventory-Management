@@ -9,8 +9,8 @@ namespace Sims.Api.IRepositories
 {
     public interface IShopRepository
     {
-           public Task<CommonResponseDto> CreateOrUpdateShop(CreateOrUpdateShopDto model, Ulid userId);
-           public Task<CommonResponseDto> GetShopById(long shopId);
-           public Task<CommonResponseDto> DeleteShop(long shopId, Ulid userId);
+        public Task<CommonResponseDto> CreateOrUpdateShop(CreateOrUpdateShopDto model, Ulid userId);
+        public Task<CommonResponseDto> GetShopById(long shopId);
+        public Task<CommonResponseDto> DeleteShop(long shopId, Ulid userId);
     }
 }

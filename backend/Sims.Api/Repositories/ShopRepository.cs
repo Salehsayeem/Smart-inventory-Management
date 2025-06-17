@@ -7,7 +7,8 @@ using Sims.Api.Models;
 namespace Sims.Api.Repositories
 {
     public class ShopRepository : IShopRepository
-    {        private readonly ApplicationDbContext _context;
+    {
+        private readonly ApplicationDbContext _context;
 
         public ShopRepository(ApplicationDbContext context)
         {
@@ -44,7 +45,7 @@ namespace Sims.Api.Repositories
                 await _context.SaveChangesAsync();
                 return new CommonResponseDto()
                 {
-                    Message = model.Id == 0? $"{model.Name}  created successfully": $"{model.Name} updated successfully",
+                    Message = model.Id == 0 ? $"{model.Name}  created successfully" : $"{model.Name} updated successfully",
                     Data = null,
                     StatusCode = 200,
                 };
@@ -82,7 +83,7 @@ namespace Sims.Api.Repositories
             }
         }
 
-        public async Task<CommonResponseDto> DeleteShop(long shopId , Ulid userId)
+        public async Task<CommonResponseDto> DeleteShop(long shopId, Ulid userId)
         {
             try
             {
