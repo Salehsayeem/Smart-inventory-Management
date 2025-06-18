@@ -1,9 +1,11 @@
 ﻿using Npgsql;
 using System.Data;
 using Newtonsoft.Json;
+using Sims.Api.Dto;
 using Sims.Api.Dto.Category;
 using Sims.Api.Dto.Product;
 using Sims.Api.Helper;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Sims.Api.StoredProcedure
 {
@@ -164,6 +166,79 @@ namespace Sims.Api.StoredProcedure
                     }
                 }
             }
+        }
+
+        public List<CommonDdlDto> CategoryListOfShopDdl(long shopId, string connectionString)
+        {
+            if (connectionString == null)
+            {
+                throw new ArgumentNullException(nameof(connectionString), "Connection string cannot be null");
+            }
+
+            if (shopId <= 0)
+            {
+                throw new ArgumentException("shop ID must be a positive number", nameof(shopId));
+            }
+
+            using (var connection = new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(
+                           $"SELECT * FROM {CommonHelper.StoredProcedureNames.GetCategoryListOfShopDdl}(@shop_id)",
+                           connection))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.AddWithValue("@shop_id", shopId);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            var jsonData = reader.IsDBNull(0) ? "[]" : reader.GetString(0);
+                            return JsonConvert.DeserializeObject<List<CommonDdlDto>>(jsonData)
+                                   ?? [];
+                        }
+                    }
+                }
+            }
+
+            return new List<CommonDdlDto>();
+        }
+        public List<CommonDdlDto> ProductListOfShopDdl(long shopId, string connectionString)
+        {
+            if (connectionString == null)
+            {
+                throw new ArgumentNullException(nameof(connectionString), "Connection string cannot be null");
+            }
+
+            if (shopId <= 0)
+            {
+                throw new ArgumentException("shop ID must be a positive number", nameof(shopId));
+            }
+
+            using (var connection = new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var cmd = new NpgsqlCommand(
+                           $"SELECT * FROM {CommonHelper.StoredProcedureNames.GetProductListOfShopDdl}(@shop_id)",
+                           connection))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.AddWithValue("@shop_id", shopId);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            var jsonData = reader.IsDBNull(0) ? "[]" : reader.GetString(0);
+                            return JsonConvert.DeserializeObject<List<CommonDdlDto>>(jsonData)
+                                   ?? [];
+                        }
+                    }
+                }
+            }
+
+            return new List<CommonDdlDto>();
         }
     }
 }
