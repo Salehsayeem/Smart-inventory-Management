@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sims.Api.Context;
 using Sims.Api.Dto;
+using Sims.Api.Dto.Category;
+using Sims.Api.Dto.Location;
 using Sims.Api.Dto.Product;
 using Sims.Api.Helper;
 using Sims.Api.IRepositories;
@@ -12,12 +14,11 @@ namespace Sims.Api.Repositories
     public class ProductRepository : IProductRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly AppSettings _settings;
-
-        public ProductRepository(ApplicationDbContext context, AppSettings settings)
+        private readonly CallStoredProcedure _spCaller;
+        public ProductRepository(ApplicationDbContext context, CallStoredProcedure spCaller)
         {
             _context = context;
-            _settings = settings;
+            _spCaller = spCaller;
         }
         public async Task<CommonResponseDto> CreateOrUpdateProduct(CreateOrUpdateProductDto model, Ulid userId)
         {
@@ -60,7 +61,7 @@ namespace Sims.Api.Repositories
                 else
                 {
                     var data = await _context.Products
-                        .FirstOrDefaultAsync(a => a.Id == model.Id && a.ShopId == model.ShopId && a.CategoryId== model.CategoryId && a.IsActive);
+                        .FirstOrDefaultAsync(a => a.Id == model.Id && a.ShopId == model.ShopId && a.CategoryId == model.CategoryId && a.IsActive);
                     if (data == null)
                     {
                         return new CommonResponseDto
@@ -71,7 +72,7 @@ namespace Sims.Api.Repositories
                         };
                     }
                     var duplicate = await _context.Products
-                        .AnyAsync(a => a.Id != model.Id && a.ShopId == model.ShopId && a.CategoryId== model.CategoryId && a.Name.Trim() == model.Name.Trim() && a.IsActive);
+                        .AnyAsync(a => a.Id != model.Id && a.ShopId == model.ShopId && a.CategoryId == model.CategoryId && a.Name.Trim() == model.Name.Trim() && a.IsActive);
                     if (duplicate)
                     {
                         return new CommonResponseDto
@@ -138,37 +139,49 @@ namespace Sims.Api.Repositories
             }
         }
 
-        public CommonResponseDto GetProductByShopId(string search, long shopId, int pageNo, int pageSize)
+        public async Task<PaginationDto<ProductLandingDataDto>> GetProductByShopId(string search, long shopId, int pageNumber, int pageSize)
         {
             try
             {
-                CallStoredProcedure sp = new CallStoredProcedure();
-                var data = sp.AllProductsPagination(search, shopId, pageNo, pageSize, _settings.ConnectionString);
-                return new CommonResponseDto()
-                {
-                    Data = data,
-                    Message = "",
-                    StatusCode = 200
-                };
+                if (shopId <= 0)
+                    throw new ArgumentException("Shop ID must be a positive number", nameof(shopId));
+                if (pageNumber < 1)
+                    throw new ArgumentException("Page number must be at least 1", nameof(pageNumber));
+                if (pageSize < 1)
+                    throw new ArgumentException("Page size must be at least 1", nameof(pageSize));
+
+                return await _spCaller.CallPagedFunctionAsync<ProductLandingDataDto>(
+                    CommonHelper.StoredProcedureNames.GetAllProductsPagination,
+                    new { p0 = search, p1 = shopId, p2 = pageNumber, p3 = pageSize },
+                    pageNumber,
+                    pageSize
+                );
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
         }
-
-        public CommonResponseDto GetProductByCategoryId(string search, long shopId, long categoryId, int pageNo, int pageSize)
+        public async Task<PaginationDto<ProductLandingDataDto>> GetProductByCategoryId(string search, long shopId, long categoryId, int pageNumber, int pageSize)
         {
             try
             {
-                CallStoredProcedure sp = new CallStoredProcedure();
-                var data = sp.AllProductsByCategoryPagination(search, shopId,categoryId, pageNo, pageSize, _settings.ConnectionString);
-                return new CommonResponseDto()
-                {
-                    Data = data,
-                    Message = "",
-                    StatusCode = 200
-                };
+                if (shopId <= 0)
+                    throw new ArgumentException("Shop ID must be a positive number", nameof(shopId));
+                if (categoryId <= 0)
+                    throw new ArgumentException("category ID must be a positive number", nameof(categoryId));
+                if (pageNumber < 1)
+                    throw new ArgumentException("Page number must be at least 1", nameof(pageNumber));
+                if (pageSize < 1)
+                    throw new ArgumentException("Page size must be at least 1", nameof(pageSize));
+
+
+                return await _spCaller.CallPagedFunctionAsync<ProductLandingDataDto>(
+                    CommonHelper.StoredProcedureNames.GetAllProductsByCategoryPagination,
+                    new { p0 = search, p1 = shopId, p2 = categoryId, p3 = pageNumber, p4 = pageSize },
+                    pageNumber,
+                    pageSize
+                );
             }
             catch (Exception e)
             {

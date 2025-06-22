@@ -2,29 +2,29 @@
 using Sims.Api.Helper;
 using Sims.Api.IRepositories;
 using Sims.Api.StoredProcedure;
+using static Sims.Api.Helper.CommonHelper;
 
 namespace Sims.Api.Repositories
 {
     public class CommonRepository : ICommonRepository
     {
-        public readonly AppSettings _appSettings;
-
-        public CommonRepository(AppSettings appSettings)
+        private readonly CallStoredProcedure _spCaller;
+        public CommonRepository(CallStoredProcedure spCaller)
         {
-            _appSettings = appSettings;
+            _spCaller = spCaller;
         }
 
-        public CommonResponseDto AllCategoriesOfShopDdl(long shopId)
+        public async Task<List<CommonDdlDto>> AllCategoriesOfShopDdl(long shopId, string search)
         {
             try
             {
-                CallStoredProcedure sp = new CallStoredProcedure();
-                var data = sp.CategoryListOfShopDdl(shopId,_appSettings.ConnectionString);
-                return new CommonResponseDto()
-                {
-                    Data = data,
-                    StatusCode = 200,
-                };
+                if (shopId <= 0)
+                    throw new ArgumentException("Shop ID must be a positive number", nameof(shopId));
+
+                return await _spCaller.CallFunctionAsync<List<CommonDdlDto>>(
+                    StoredProcedureNames.GetCategoryListOfShopDdl,
+                    new { p0 = shopId, p1 = search }
+                );
 
             }
             catch (Exception e)
@@ -33,22 +33,39 @@ namespace Sims.Api.Repositories
             }
         }
 
-        public CommonResponseDto AllProductsOfShopDdl(long shopId)
+        public async Task<List<CommonDdlDto>> AllProductsOfShopDdl(long shopId, string search)
         {
             try
             {
-                CallStoredProcedure sp = new CallStoredProcedure();
-                var data = sp.ProductListOfShopDdl(shopId, _appSettings.ConnectionString);
-                return new CommonResponseDto()
-                {
-                    Data = data,
-                    StatusCode = 200,
-                };
+                if (shopId <= 0)
+                    throw new ArgumentException("Shop ID must be a positive number", nameof(shopId));
 
+                return await _spCaller.CallFunctionAsync<List<CommonDdlDto>>(
+                    StoredProcedureNames.GetProductListOfShopDdl,
+                    new { p0 = shopId, p1 = search }
+                );
             }
             catch (Exception e)
             {
                 throw new Exception($"Error in {nameof(AllProductsOfShopDdl)}: {e.Message}", e);
+            }
+        }
+
+        public async Task<List<CommonDdlDto>> AllWarehousesOfShopDdl(long shopId, string search)
+        {
+            try
+            {
+                if (shopId <= 0)
+                    throw new ArgumentException("Shop ID must be a positive number", nameof(shopId));
+
+                return await _spCaller.CallFunctionAsync<List<CommonDdlDto>>(
+                    StoredProcedureNames.GetWarehouseListDdl,
+                    new { p0 = shopId, p1 = search }
+                );
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error in {nameof(AllWarehousesOfShopDdl)}: {e.Message}", e);
             }
         }
     }

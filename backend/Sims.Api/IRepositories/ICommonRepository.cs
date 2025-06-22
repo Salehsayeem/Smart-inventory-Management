@@ -4,7 +4,8 @@ namespace Sims.Api.IRepositories
 {
     public interface ICommonRepository
     {
-        public CommonResponseDto AllCategoriesOfShopDdl(long shopId);
-        public CommonResponseDto AllProductsOfShopDdl(long shopId);
+        public Task<List<CommonDdlDto>> AllCategoriesOfShopDdl(long shopId, string search);
+        public Task<List<CommonDdlDto>> AllProductsOfShopDdl(long shopId, string search);
+        public Task<List<CommonDdlDto>> AllWarehousesOfShopDdl(long shopId, string search);
     }
 }

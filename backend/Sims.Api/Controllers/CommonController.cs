@@ -17,12 +17,16 @@ namespace Sims.Api.Controllers
         }
 
         [HttpGet("CategoriesOfShopDdl")]
-        public CommonResponseDto AllCategoriesOfShopDdl(long shopId)
+        public async Task<CommonResponseDto> AllCategoriesOfShopDdl(long shopId, string? search)
         {
             try
             {
-                var response = _commonRepository.AllCategoriesOfShopDdl(shopId);
-                return response;
+                var response = await _commonRepository.AllCategoriesOfShopDdl(shopId, search);
+                return new CommonResponseDto()
+                {
+                    Data = response,
+                    StatusCode = 200
+                };
             }
             catch (Exception e)
             {
@@ -31,16 +35,37 @@ namespace Sims.Api.Controllers
         }
 
         [HttpGet("ProductsOfShopDdl")]
-        public CommonResponseDto AllProductsOfShopDdl(long shopId)
+        public async Task<CommonResponseDto> AllProductsOfShopDdl(long shopId, string? search)
         {
             try
             {
-                var response = _commonRepository.AllProductsOfShopDdl(shopId);
-                return response;
+                var response = await _commonRepository.AllProductsOfShopDdl(shopId, search);
+                return new CommonResponseDto()
+                {
+                    Data = response,
+                    StatusCode = 200
+                };
             }
             catch (Exception e)
             {
                 throw new Exception($"Error in {nameof(AllProductsOfShopDdl)}: {e.Message}", e);
+            }
+        }
+        [HttpGet("WarehousesOfShopDdl")]
+        public async Task<CommonResponseDto> AllWarehousesOfShopDdl(long shopId, string? search)
+        {
+            try
+            {
+                var response = await _commonRepository.AllWarehousesOfShopDdl(shopId, search);
+                return new CommonResponseDto()
+                {
+                    Data = response,
+                    StatusCode = 200
+                };
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error in {nameof(AllWarehousesOfShopDdl)}: {e.Message}", e);
             }
         }
     }

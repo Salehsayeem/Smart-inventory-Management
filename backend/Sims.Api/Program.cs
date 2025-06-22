@@ -4,8 +4,9 @@ using Sims.Api.Helper;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-AppSettings appSettings = new AppSettings();
-appSettings.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
+
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -18,10 +19,18 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerWithJwt();
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(appSettings.ConnectionString));
+    options.UseNpgsql(connectionString));
 
+builder.Services.AddSingleton<AppSettings>(sp =>
+{
+    var settings = new AppSettings
+    {
+        ConnectionString = connectionString
+                           ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found")
+    };
+    return settings;
+});
 
-builder.Services.AddSingleton<AppSettings>(appSettings);
 builder.Services.AddDependencyInjections();
 
 builder.Services.AddCors(options =>

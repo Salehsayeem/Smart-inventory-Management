@@ -2,53 +2,52 @@
 using Sims.Api.Context;
 using Sims.Api.Dto;
 using Sims.Api.Dto.Category;
-using Sims.Api.Dto.Product;
+using Sims.Api.Dto.Location;
 using Sims.Api.Helper;
 using Sims.Api.IRepositories;
 using Sims.Api.Models;
 using Sims.Api.StoredProcedure;
-using static Sims.Api.Helper.CommonHelper;
 
 namespace Sims.Api.Repositories
 {
-    public class CategoryRepository : ICategoryRepository
+    public class LocationRepository : ILocationRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly CallStoredProcedure _spCaller;
 
-        public CategoryRepository(ApplicationDbContext context, CallStoredProcedure spCaller)
+        public LocationRepository(ApplicationDbContext context, CallStoredProcedure spCaller)
         {
             _context = context;
             _spCaller = spCaller;
         }
 
-        public async Task<CommonResponseDto> CreateOrUpdateCategory(CreateOrUpdateCategoryDto model, Ulid userId)
+        public async Task<CommonResponseDto> CreateOrUpdateWarehouse(CreateOrUpdateWarehouseDto model, Ulid userId)
         {
             try
             {
                 if (model.Id == 0)
                 {
-                    var exists = await _context.Categories
+                    var exists = await _context.Locations
                         .AnyAsync(a => a!.ShopId == model.ShopId && a.Name.Trim() == model.Name.Trim() && a.IsActive);
                     if (exists)
                     {
                         return new CommonResponseDto
                         {
-                            Message = $"Category '{model.Name}' already exists.",
+                            Message = $"Warehouse '{model.Name}' already exists.",
                             Data = null,
                             StatusCode = 400
                         };
                     }
 
-                    var data = new Category
+                    var data = new Location()
                     {
                         Name = model.Name,
-                        Description = model.Description,
+                        Address = model.Address,
                         ShopId = model.ShopId,
                         CreatedBy = userId,
                         IsActive = true
                     };
-                    await _context.Categories.AddAsync(data);
+                    await _context.Locations.AddAsync(data);
                     await _context.SaveChangesAsync();
                     return new CommonResponseDto
                     {
@@ -59,18 +58,18 @@ namespace Sims.Api.Repositories
                 }
                 else
                 {
-                    var category = await _context.Categories
+                    var data = await _context.Locations
                         .FirstOrDefaultAsync(a => a.Id == model.Id && a.ShopId == model.ShopId && a.IsActive);
-                    if (category == null)
+                    if (data == null)
                     {
                         return new CommonResponseDto
                         {
-                            Message = "Category not found.",
+                            Message = "Location not found.",
                             Data = null,
                             StatusCode = 404
                         };
                     }
-                    var duplicate = await _context.Categories
+                    var duplicate = await _context.Locations
                         .AnyAsync(a => a.Id != model.Id && a.ShopId == model.ShopId && a.Name.Trim() == model.Name.Trim() && a.IsActive);
                     if (duplicate)
                     {
@@ -82,10 +81,10 @@ namespace Sims.Api.Repositories
                         };
                     }
 
-                    category.Name = model.Name;
-                    category.Description = model.Description;
-                    category.ModifiedBy = userId;
-                    _context.Categories.Update(category);
+                    data.Name = model.Name;
+                    data.Address = model.Address;
+                    data.ModifiedBy = userId;
+                    _context.Locations.Update(data);
                     await _context.SaveChangesAsync();
                     return new CommonResponseDto
                     {
@@ -101,91 +100,97 @@ namespace Sims.Api.Repositories
             }
         }
 
-        public async Task<CommonResponseDto> GetCategoryById(long categoryId)
+        public async Task<CommonResponseDto> GetWarehouseById(long warehouseId)
         {
             try
             {
-                var category = await _context.Categories
-                    .Where(a => a.Id == categoryId && a.IsActive)
-                    .Select(a => new GetCategoryByIdDto
+                var warehouse = await _context.Locations
+                    .Where(a => a.Id == warehouseId && a.IsActive)
+                    .Select(a => new GetWarehouseByIdDto()
                     {
                         Id = a.Id,
                         Name = a.Name,
-                        Description = a.Description!,
+                        Address = a.Address!,
                         ShopId = a.ShopId
                     })
                     .FirstOrDefaultAsync();
-                if (category == null)
+                if (warehouse == null)
                 {
                     return new CommonResponseDto
                     {
-                        Message = "Category not found.",
+                        Message = "Warehouse not found.",
                         Data = null,
                         StatusCode = 404
                     };
                 }
                 return new CommonResponseDto
                 {
-                    Message = "Category retrieved successfully.",
-                    Data = category,
+                    Data = warehouse,
                     StatusCode = 200
                 };
             }
-
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                throw new Exception($"Error in {nameof(GetWarehouseById)}: {e.Message}", e);
+
             }
+
         }
 
-
-        public async Task<PaginationDto<CategoryLandingDataDto>> GetAllCategoryByShopId(string search, long shopId, int pageNumber, int pageSize)
-        {
-            if (shopId <= 0)
-                throw new ArgumentException("Shop ID must be a positive number", nameof(shopId));
-            if (pageNumber < 1)
-                throw new ArgumentException("Page number must be at least 1", nameof(pageNumber));
-            if (pageSize < 1)
-                throw new ArgumentException("Page size must be at least 1", nameof(pageSize));
-
-            return await _spCaller.CallPagedFunctionAsync<CategoryLandingDataDto>(
-                StoredProcedureNames.GetCategoryPagination,
-                new { p0 = search, p1 = shopId, p2 = pageNumber, p3 = pageSize },
-                pageNumber,
-                pageSize
-            );
-        }
-
-        public async Task<CommonResponseDto> DeleteCategory(long categoryId, Ulid userId)
+        public async Task<PaginationDto<WarehouseLandingDataDto>> GetAllWarehousesByShopId(string search, long shopId, int pageNo, int pageSize)
         {
             try
             {
-                var category = await _context.Categories
-                    .FirstOrDefaultAsync(a => a.Id == categoryId && a.IsActive);
-                if (category == null)
+                if (shopId <= 0)
+                    throw new ArgumentException("Shop ID must be a positive number", nameof(shopId));
+                if (pageNo < 1)
+                    throw new ArgumentException("Page number must be at least 1", nameof(pageNo));
+                if (pageSize < 1)
+                    throw new ArgumentException("Page size must be at least 1", nameof(pageSize));
+
+                return await _spCaller.CallPagedFunctionAsync<WarehouseLandingDataDto>(
+                    CommonHelper.StoredProcedureNames.GetAllLocationsPagination,
+                    new { p0 = search, p1 = shopId, p2 = pageNo, p3 = pageSize },
+                    pageNo,
+                    pageSize
+                );
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error in {nameof(GetAllWarehousesByShopId)}: {e.Message}", e);
+            }
+
+        }
+
+        public async Task<CommonResponseDto> DeleteWarehouse(long warehouseId, Ulid userId)
+        {
+            try
+            {
+                var warehouse = await _context.Locations
+                    .FirstOrDefaultAsync(a => a.Id == warehouseId && a.IsActive);
+                if (warehouse == null)
                 {
                     return new CommonResponseDto
                     {
-                        Message = "Category not found.",
+                        Message = "Warehouse not found.",
                         Data = null,
                         StatusCode = 404
                     };
                 }
-                category.IsActive = false;
-                category.ModifiedBy = userId;
-                _context.Categories.Update(category);
+                warehouse.IsActive = false;
+                warehouse.ModifiedBy = userId;
+                _context.Locations.Update(warehouse);
                 await _context.SaveChangesAsync();
-
                 return new CommonResponseDto
                 {
-                    Message = "Category deleted successfully.",
+                    Message = "Warehouse deleted successfully.",
                     Data = null,
                     StatusCode = 200
                 };
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                throw new Exception($"Error in {nameof(DeleteWarehouse)}: {e.Message}", e);
             }
         }
     }

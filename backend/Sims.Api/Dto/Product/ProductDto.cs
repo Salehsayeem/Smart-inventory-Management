@@ -24,13 +24,6 @@ namespace Sims.Api.Dto.Product
         public string? Description { get; set; }
         public decimal UnitPrice { get; set; }
     }
-    public class ProductLandingPaginationDto
-    {
-        public List<ProductLandingDataDto> Response { get; set; } = default!;
-        public long CurrentPage { get; set; } = default!;
-        public long TotalCount { get; set; } = default!;
-        public long PageSize { get; set; } = default!;
-    }
 
     public class ProductLandingDataDto
     {

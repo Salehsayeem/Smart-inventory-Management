@@ -1,244 +1,131 @@
-﻿using Npgsql;
-using System.Data;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Npgsql;
 using Sims.Api.Dto;
-using Sims.Api.Dto.Category;
-using Sims.Api.Dto.Product;
 using Sims.Api.Helper;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.Data;
+using Dapper;
 
 namespace Sims.Api.StoredProcedure
 {
-    public class CallStoredProcedure
+    public class CallStoredProcedure(AppSettings appSettings)
     {
-        public CategoryLandingPaginationDto CategoryLandingPagination(string search, long shopId, int pageNo, int pageSize, string connectionString)
+        private readonly AppSettings _appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
+
+        public async Task<TResult> CallFunctionAsync<TResult>(string functionName, object parameters = null)
         {
-            if (connectionString == null)
-            {
-                throw new ArgumentNullException(nameof(connectionString), "Connection string cannot be null");
-            }
+            if (string.IsNullOrWhiteSpace(functionName))
+                throw new ArgumentException("Function name cannot be empty", nameof(functionName));
 
-            if (shopId == 0)
-            {
-                throw new ArgumentException("Shop ID cannot be zero", nameof(shopId));
-            }
+            if (string.IsNullOrWhiteSpace(_appSettings.ConnectionString))
+                throw new InvalidOperationException("Connection string is not configured");
 
-            using (var connection = new NpgsqlConnection(connectionString))
+            try
             {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(
-                    $"SELECT * FROM {CommonHelper.StoredProcedureNames.GetCategoryPagination}(@search, @shop_id, @page_number, @page_size)",
-                    connection))
+                using (var connection = new NpgsqlConnection(_appSettings.ConnectionString))
                 {
-                    cmd.CommandType = CommandType.Text;
+                    await connection.OpenAsync();
 
-                    cmd.Parameters.AddWithValue("@search", string.IsNullOrEmpty(search) ? DBNull.Value : (object)search);
-                    cmd.Parameters.AddWithValue("@shop_id", shopId);
-                    cmd.Parameters.AddWithValue("@page_number", pageNo);
-                    cmd.Parameters.AddWithValue("@page_size", pageSize);
+                    // Construct the SQL query with schema
+                    var paramNames = parameters != null
+                        ? string.Join(", ", parameters.GetType().GetProperties().Select((p, i) => $"@p{i}"))
+                        : string.Empty;
 
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        if (!reader.Read()) return new CategoryLandingPaginationDto();
-                        var jsonData = reader.IsDBNull(0) ? "[]" : reader.GetString(0);
-                        var totalCount = reader.GetInt32(1);
+                    var sql = $"SELECT * FROM public.{functionName}({paramNames})";
 
-                        var response = JsonConvert.DeserializeObject<List<CategoryLandingDataDto>>(jsonData)
-                                       ?? [];
+                    // Execute query and get JSON result
+                    var jsonResult = await connection.QuerySingleAsync<string>(
+                        sql,
+                        parameters,
+                        commandType: System.Data.CommandType.Text
+                    );
 
-                        for (int i = 0; i < response.Count; i++)
-                        {
-                            response[i].Sl = i + 1;
-                        }
-
-                        return new CategoryLandingPaginationDto()
-                        {
-                            Response = response,
-                            TotalCount = totalCount,
-                            PageSize = pageSize,
-                            CurrentPage = pageNo
-                        };
-                    }
+                    // Deserialize JSON to the requested type
+                    return JsonConvert.DeserializeObject<TResult>(jsonResult ?? "[]")
+                        ?? (TResult)Activator.CreateInstance(typeof(TResult));
                 }
+            }
+            catch (NpgsqlException ex)
+            {
+                // In a real app, use a proper logging framework
+                Console.Error.WriteLine($"Database error calling {functionName}: {ex.Message}");
+                throw new ApplicationException($"Failed to execute function {functionName}", ex);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Unexpected error calling {functionName}: {ex.Message}");
+                throw;
             }
         }
 
-        public ProductLandingPaginationDto AllProductsPagination(string search, long shopId, int pageNo, int pageSize, string connectionString)
+        public async Task<PaginationDto<TData>> CallPagedFunctionAsync<TData>(
+            string functionName,
+            object parameters = null,
+            int pageNumber = 1,
+            int pageSize = 10)
         {
-            if (connectionString == null)
-            {
-                throw new ArgumentNullException(nameof(connectionString), "Connection string cannot be null");
-            }
+            if (string.IsNullOrWhiteSpace(functionName))
+                throw new ArgumentException("Function name cannot be empty", nameof(functionName));
+            if (pageNumber < 1)
+                throw new ArgumentException("Page number must be at least 1", nameof(pageNumber));
+            if (pageSize < 1)
+                throw new ArgumentException("Page size must be at least 1", nameof(pageSize));
+            if (string.IsNullOrWhiteSpace(_appSettings.ConnectionString))
+                throw new InvalidOperationException("Connection string is not configured");
 
-            if (shopId == 0)
+            try
             {
-                throw new ArgumentException("Shop ID cannot be zero", nameof(shopId));
-            }
-
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(
-                           $"SELECT * FROM {CommonHelper.StoredProcedureNames.GetAllProductsPagination}(@search, @shop_id, @page_number, @page_size)",
-                           connection))
+                using (var connection = new NpgsqlConnection(_appSettings.ConnectionString))
                 {
-                    cmd.CommandType = CommandType.Text;
+                    await connection.OpenAsync();
 
-                    cmd.Parameters.AddWithValue("@search", string.IsNullOrEmpty(search) ? DBNull.Value : (object)search);
-                    cmd.Parameters.AddWithValue("@shop_id", shopId);
-                    cmd.Parameters.AddWithValue("@page_number", pageNo);
-                    cmd.Parameters.AddWithValue("@page_size", pageSize);
+                    var paramNames = parameters != null
+                        ? string.Join(", ", parameters.GetType().GetProperties().Select((p, i) => $"@p{i}"))
+                        : string.Empty;
 
-                    using (var reader = cmd.ExecuteReader())
+                    var sql = $"SELECT * FROM public.{functionName}({paramNames})";
+
+                    var result = await connection.QuerySingleAsync(
+                        sql,
+                        parameters,
+                        commandType: System.Data.CommandType.Text
+                    );
+
+                    var jsonData = result.result_data as string;
+                    var totalCount = Convert.ToInt32(result.total_count);
+
+                    var data = JsonConvert.DeserializeObject<List<TData>>(jsonData ?? "[]")
+                        ?? new List<TData>();
+
+                    // Add Sl to each item if TData has an Sl property
+                    if (typeof(TData).GetProperty("Sl") != null)
                     {
-                        if (!reader.Read()) return new ProductLandingPaginationDto();
-                        var jsonData = reader.IsDBNull(0) ? "[]" : reader.GetString(0);
-                        var totalCount = reader.GetInt32(1);
-
-                        var response = JsonConvert.DeserializeObject<List<ProductLandingDataDto>>(jsonData)
-                                       ?? [];
-
-                        for (int i = 0; i < response.Count; i++)
+                        for (int i = 0; i < data.Count; i++)
                         {
-                            response[i].Sl = i + 1;
-                        }
-
-                        return new ProductLandingPaginationDto()
-                        {
-                            Response = response,
-                            TotalCount = totalCount,
-                            PageSize = pageSize,
-                            CurrentPage = pageNo
-                        };
-                    }
-                }
-            }
-        }
-
-        public ProductLandingPaginationDto AllProductsByCategoryPagination(string search, long shopId,long categoryId, int pageNo, int pageSize, string connectionString)
-        {
-            if (connectionString == null)
-            {
-                throw new ArgumentNullException(nameof(connectionString), "Connection string cannot be null");
-            }
-
-            if (shopId == 0)
-            {
-                throw new ArgumentException("Shop ID cannot be zero", nameof(shopId));
-            }
-
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(
-                           $"SELECT * FROM {CommonHelper.StoredProcedureNames.GetAllProductsByCategoryPagination}(@search, @shop_id,@category_id, @page_number, @page_size)",
-                           connection))
-                {
-                    cmd.CommandType = CommandType.Text;
-
-                    cmd.Parameters.AddWithValue("@search", string.IsNullOrEmpty(search) ? DBNull.Value : (object)search);
-                    cmd.Parameters.AddWithValue("@shop_id", shopId);
-                    cmd.Parameters.AddWithValue("@category_id", categoryId);
-                    cmd.Parameters.AddWithValue("@page_number", pageNo);
-                    cmd.Parameters.AddWithValue("@page_size", pageSize);
-
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        if (!reader.Read()) return new ProductLandingPaginationDto();
-                        var jsonData = reader.IsDBNull(0) ? "[]" : reader.GetString(0);
-                        var totalCount = reader.GetInt32(1);
-
-                        var response = JsonConvert.DeserializeObject<List<ProductLandingDataDto>>(jsonData)
-                                       ?? [];
-
-                        for (int i = 0; i < response.Count; i++)
-                        {
-                            response[i].Sl = i + 1;
-                        }
-
-                        return new ProductLandingPaginationDto()
-                        {
-                            Response = response,
-                            TotalCount = totalCount,
-                            PageSize = pageSize,
-                            CurrentPage = pageNo
-                        };
-                    }
-                }
-            }
-        }
-
-        public List<CommonDdlDto> CategoryListOfShopDdl(long shopId, string connectionString)
-        {
-            if (connectionString == null)
-            {
-                throw new ArgumentNullException(nameof(connectionString), "Connection string cannot be null");
-            }
-
-            if (shopId <= 0)
-            {
-                throw new ArgumentException("shop ID must be a positive number", nameof(shopId));
-            }
-
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(
-                           $"SELECT * FROM {CommonHelper.StoredProcedureNames.GetCategoryListOfShopDdl}(@shop_id)",
-                           connection))
-                {
-                    cmd.CommandType = CommandType.Text;
-                    cmd.Parameters.AddWithValue("@shop_id", shopId);
-
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            var jsonData = reader.IsDBNull(0) ? "[]" : reader.GetString(0);
-                            return JsonConvert.DeserializeObject<List<CommonDdlDto>>(jsonData)
-                                   ?? [];
+                            var item = data[i];
+                            var sl = (pageNumber - 1) * pageSize + i + 1;
+                            typeof(TData).GetProperty("Sl")?.SetValue(item, sl);
                         }
                     }
-                }
-            }
 
-            return new List<CommonDdlDto>();
-        }
-        public List<CommonDdlDto> ProductListOfShopDdl(long shopId, string connectionString)
-        {
-            if (connectionString == null)
-            {
-                throw new ArgumentNullException(nameof(connectionString), "Connection string cannot be null");
-            }
-
-            if (shopId <= 0)
-            {
-                throw new ArgumentException("shop ID must be a positive number", nameof(shopId));
-            }
-
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(
-                           $"SELECT * FROM {CommonHelper.StoredProcedureNames.GetProductListOfShopDdl}(@shop_id)",
-                           connection))
-                {
-                    cmd.CommandType = CommandType.Text;
-                    cmd.Parameters.AddWithValue("@shop_id", shopId);
-
-                    using (var reader = cmd.ExecuteReader())
+                    return new PaginationDto<TData>
                     {
-                        if (reader.Read())
-                        {
-                            var jsonData = reader.IsDBNull(0) ? "[]" : reader.GetString(0);
-                            return JsonConvert.DeserializeObject<List<CommonDdlDto>>(jsonData)
-                                   ?? [];
-                        }
-                    }
+                        Response = data,
+                        CurrentPage = pageNumber,
+                        PageSize = pageSize,
+                        TotalCount = totalCount
+                    };
                 }
             }
-
-            return new List<CommonDdlDto>();
+            catch (NpgsqlException ex)
+            {
+                Console.Error.WriteLine($"Database error calling {functionName}: {ex.Message}");
+                throw new ApplicationException($"Failed to execute function {functionName}", ex);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Unexpected error calling {functionName}: {ex.Message}");
+                throw;
+            }
         }
     }
 }

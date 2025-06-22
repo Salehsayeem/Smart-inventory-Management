@@ -17,4 +17,11 @@ namespace Sims.Api.Dto
             return JsonSerializer.Serialize(this, options);
         }
     }
+    public class PaginationDto<T>
+    {
+        public List<T> Response { get; set; } = new List<T>();
+        public long CurrentPage { get; set; }
+        public long PageSize { get; set; }
+        public long TotalCount { get; set; }
+    }
 }

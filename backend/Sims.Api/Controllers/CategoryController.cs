@@ -57,11 +57,16 @@ namespace Sims.Api.Controllers
         }
 
         [HttpGet("GetAllCategoriesByShopId")]
-        public CommonResponseDto GetAllCategoriesByShopId(string? search, long shopId, int pageNo, int pageSize)
+        public async Task<CommonResponseDto> GetAllCategoriesByShopId(string? search, long shopId, int pageNo, int pageSize)
         {
             try
             {
-                return _categoryRepository.GetAllCategoryByShopId(search, shopId, pageNo, pageSize);
+                var data = await _categoryRepository.GetAllCategoryByShopId(search, shopId, pageNo, pageSize);
+                return new CommonResponseDto()
+                {
+                    Data = data,
+                    StatusCode = 200
+                };
             }
             catch (Exception e)
             {

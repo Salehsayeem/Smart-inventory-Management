@@ -2,23 +2,24 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sims.Api.Dto;
-using Sims.Api.Dto.Product;
+using Sims.Api.Dto.Location;
 using Sims.Api.IRepositories;
 
 namespace Sims.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class WarehouseController : ControllerBase
     {
-        private readonly IProductRepository _repository;
+        public readonly ILocationRepository _locationRepository;
 
-        public ProductController(IProductRepository repository)
+        public WarehouseController(ILocationRepository locationRepository)
         {
-            _repository = repository;
+            _locationRepository = locationRepository;
         }
-        [HttpPost("CreateOrUpdateProduct")]
-        public async Task<CommonResponseDto> CreateOrUpdateProduct([FromBody] CreateOrUpdateProductDto model)
+
+        [HttpPost("CreateOrUpdateWarehouse")]
+        public async Task<CommonResponseDto> CreateOrUpdateWarehouse([FromBody] CreateOrUpdateWarehouseDto model)
         {
             try
             {
@@ -32,49 +33,35 @@ namespace Sims.Api.Controllers
                         StatusCode = 403,
                     };
                 }
-                return await _repository.CreateOrUpdateProduct(model, currentUserId);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-        [HttpGet("GetProductById")]
-        public async Task<CommonResponseDto> GetProductById(long productId)
-        {
-            try
-            {
-                return await _repository.GetProductById(productId);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-        [HttpGet("GetProductByShopId")]
-        public async Task<CommonResponseDto> GetProductByShopId(string? search, long shopId, int pageNo, int pageSize)
-        {
-            try
-            {
-                var data = await _repository.GetProductByShopId(search, shopId, pageNo, pageSize);
 
-                return new CommonResponseDto()
-                {
-                    Data = data,
-                    StatusCode = 200
-                };
+                return await _locationRepository.CreateOrUpdateWarehouse(model, currentUserId);
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
         }
-        [HttpGet("GetProductByCategoryId")]
-        public async Task<CommonResponseDto> GetProductByCategoryId(string? search, long shopId, long categoryId, int pageNo, int pageSize)
+
+        [HttpGet("GetWarehouseById")]
+        public async Task<CommonResponseDto> GetWarehouseById(long warehouseId)
         {
             try
             {
-                var data = await _repository.GetProductByCategoryId(search, shopId, categoryId, pageNo, pageSize);
+                return await _locationRepository.GetWarehouseById(warehouseId);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpGet("GetAllWarehousesByShopId")]
+        public async Task<CommonResponseDto> GetAllWarehousesByShopId(string? search, long shopId, int pageNo,
+            int pageSize)
+        {
+            try
+            {
+                var data = await _locationRepository.GetAllWarehousesByShopId(search, shopId, pageNo, pageSize);
                 return new CommonResponseDto()
                 {
                     Data = data,
@@ -86,8 +73,9 @@ namespace Sims.Api.Controllers
                 throw new Exception(e.Message);
             }
         }
-        [HttpDelete("DeleteProduct")]
-        public async Task<CommonResponseDto> DeleteProduct(long productId)
+
+        [HttpDelete("DeleteWarehouse")]
+        public async Task<CommonResponseDto> DeleteWarehouse(long warehouseId)
         {
             try
             {
@@ -101,7 +89,8 @@ namespace Sims.Api.Controllers
                         StatusCode = 403,
                     };
                 }
-                return await _repository.DeleteProduct(productId, currentUserId);
+
+                return await _locationRepository.DeleteWarehouse(warehouseId, currentUserId);
             }
             catch (Exception e)
             {

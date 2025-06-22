@@ -7,7 +7,7 @@ namespace Sims.Api.IRepositories
     {
         public Task<CommonResponseDto> CreateOrUpdateCategory(CreateOrUpdateCategoryDto model, Ulid userId);
         public Task<CommonResponseDto> GetCategoryById(long categoryId);
-        public CommonResponseDto GetAllCategoryByShopId(string search, long shopId, int pageNo, int pageSize);
+        public Task<PaginationDto<CategoryLandingDataDto>> GetAllCategoryByShopId(string search, long shopId, int pageNo, int pageSize);
         public Task<CommonResponseDto> DeleteCategory(long categoryId, Ulid userId);
     }
 }
