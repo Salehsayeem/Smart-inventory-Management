@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sims.Api.Context;
@@ -11,9 +12,11 @@ using Sims.Api.Context;
 namespace Sims.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250624185029_CodeAddedPS")]
+    partial class CodeAddedPS
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,7 +64,7 @@ namespace Sims.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Sims.Api.Models.ForecastData", b =>
@@ -98,7 +101,7 @@ namespace Sims.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ForecastData", (string)null);
+                    b.ToTable("ForecastData");
                 });
 
             modelBuilder.Entity("Sims.Api.Models.Inventory", b =>
@@ -144,7 +147,7 @@ namespace Sims.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Inventories", (string)null);
+                    b.ToTable("Inventories");
                 });
 
             modelBuilder.Entity("Sims.Api.Models.Location", b =>
@@ -186,7 +189,7 @@ namespace Sims.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Locations", (string)null);
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("Sims.Api.Models.Module", b =>
@@ -216,7 +219,7 @@ namespace Sims.Api.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Modules", (string)null);
+                    b.ToTable("Modules");
 
                     b.HasData(
                         new
@@ -330,7 +333,7 @@ namespace Sims.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permissions", (string)null);
+                    b.ToTable("Permissions");
                 });
 
             modelBuilder.Entity("Sims.Api.Models.Product", b =>
@@ -383,7 +386,7 @@ namespace Sims.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Sims.Api.Models.PurchaseOrder", b =>
@@ -410,9 +413,6 @@ namespace Sims.Api.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
-                    b.Property<long>("LocationId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -434,7 +434,7 @@ namespace Sims.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PurchaseOrders", (string)null);
+                    b.ToTable("PurchaseOrders");
                 });
 
             modelBuilder.Entity("Sims.Api.Models.PurchaseOrderItem", b =>
@@ -477,7 +477,7 @@ namespace Sims.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PurchaseOrderItems", (string)null);
+                    b.ToTable("PurchaseOrderItems");
                 });
 
             modelBuilder.Entity("Sims.Api.Models.Sale", b =>
@@ -528,7 +528,7 @@ namespace Sims.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sales", (string)null);
+                    b.ToTable("Sales");
                 });
 
             modelBuilder.Entity("Sims.Api.Models.SaleItem", b =>
@@ -571,7 +571,7 @@ namespace Sims.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SaleItems", (string)null);
+                    b.ToTable("SaleItems");
                 });
 
             modelBuilder.Entity("Sims.Api.Models.Shop", b =>
@@ -612,7 +612,7 @@ namespace Sims.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Shops", (string)null);
+                    b.ToTable("Shops");
                 });
 
             modelBuilder.Entity("Sims.Api.Models.StockMovement", b =>
@@ -659,7 +659,7 @@ namespace Sims.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StockMovements", (string)null);
+                    b.ToTable("StockMovements");
                 });
 
             modelBuilder.Entity("Sims.Api.Models.Supplier", b =>
@@ -713,7 +713,7 @@ namespace Sims.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Supplier", (string)null);
+                    b.ToTable("Supplier");
                 });
 
             modelBuilder.Entity("Sims.Api.Models.User", b =>
@@ -757,7 +757,7 @@ namespace Sims.Api.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Sims.Api.Models.UserShop", b =>
@@ -801,7 +801,7 @@ namespace Sims.Api.Migrations
                     b.HasIndex("UserId", "ShopId")
                         .IsUnique();
 
-                    b.ToTable("UserShops", (string)null);
+                    b.ToTable("UserShops");
                 });
 #pragma warning restore 612, 618
         }

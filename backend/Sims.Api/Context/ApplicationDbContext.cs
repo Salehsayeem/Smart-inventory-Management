@@ -17,9 +17,11 @@ namespace Sims.Api.Context
         public DbSet<StockMovement> StockMovements { get; set; } = null!;
         public DbSet<PurchaseOrderItem> PurchaseOrderItems { get; set; } = null!;
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; } = null!;
+        public DbSet<Sale> Sales { get; set; } = null!;
+        public DbSet<SaleItem> SaleItems { get; set; } = null!;
         public DbSet<Product> Products { get; set; } = null!;
         public DbSet<Location> Locations { get; set; } = null!;
-        public DbSet<Category?> Categories { get; set; } = null!;
+        public DbSet<Category> Categories { get; set; } = null!;
         public DbSet<ForecastData> ForecastData { get; set; } = null!;
         public DbSet<Inventory> Inventories { get; set; } = null!;
         public DbSet<Supplier> Supplier { get; set; } = null!;
@@ -42,6 +44,8 @@ namespace Sims.Api.Context
             modelBuilder.Entity<UserShop>()
                 .HasIndex(us => new { us.UserId, us.ShopId })
                 .IsUnique();
+
+
 
             modelBuilder.Entity<Module>().HasData(
                 new Module { Id = 1, Name = "Dashboard", ModuleIcon = "bx bxs-dashboard",Path = "dashboard" },

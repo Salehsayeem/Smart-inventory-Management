@@ -1,7 +1,9 @@
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Sims.Api.Context;
 using Sims.Api.Helper;
 using System.Text.Json.Serialization;
+using static Sims.Api.Helper.CommonHelper;
 
 var builder = WebApplication.CreateBuilder(args);
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
@@ -43,7 +45,7 @@ builder.Services.AddCors(options =>
                    .AllowAnyHeader();
         });
 });
-
+SqlMapper.AddTypeHandler(new SqlDateOnlyTypeHandler());
 var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();

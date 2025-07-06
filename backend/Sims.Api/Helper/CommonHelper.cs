@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Sims.Api.Models;
+using Dapper;
+using System.Data;
 
 namespace Sims.Api.Helper
 {
@@ -62,6 +64,17 @@ namespace Sims.Api.Helper
             {
             }
         }
+        public class SqlDateOnlyTypeHandler : SqlMapper.TypeHandler<DateOnly>
+        {
+            public override void SetValue(IDbDataParameter parameter, DateOnly date)
+            {
+                parameter.Value = date.ToDateTime(TimeOnly.MinValue);
+                parameter.DbType = DbType.Date;
+            }
+
+            public override DateOnly Parse(object value)
+                => DateOnly.FromDateTime((DateTime)value);
+        }
         public static class StoredProcedureNames
         {
             public static readonly string GetCategoryPagination = "fn_get_categories_pagination";
@@ -71,6 +84,10 @@ namespace Sims.Api.Helper
             public static readonly string GetCategoryListOfShopDdl = "ddl_category_list_of_shop";
             public static readonly string GetProductListOfShopDdl = "ddl_product_list_of_shop";
             public static readonly string GetWarehouseListDdl = "ddl_warehouse_list_of_shop";
+            public static readonly string GetAllInventoryDetailsPagination = "fn_get_all_inventory_details_pagination";
+            public static readonly string GetAllSuppliersPagination = "fn_get_all_suppliers_pagination";
+            public static readonly string GetAllPurchaseOrdersPagination = "fn_get_all_purchase_orders_pagination";
+            public static readonly string GetAllSaleOrdersPagination = "fn_get_all_sales_orders_pagination";
 
         }
     }

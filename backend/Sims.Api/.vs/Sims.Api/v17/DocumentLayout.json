@@ -1,66 +1,54 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\",
+  "WorkspaceRootPath": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart inventory system\\backend\\sims.api\\repositories\\productrepository.cs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:repositories\\productrepository.cs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart-inventory-management\\backend\\sims.api\\controllers\\salescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:controllers\\salescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart inventory system\\backend\\sims.api\\repositories\\locationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:repositories\\locationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart-inventory-management\\backend\\sims.api\\controllers\\purchasecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:controllers\\purchasecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart inventory system\\backend\\sims.api\\repositories\\categoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:repositories\\categoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart-inventory-management\\backend\\sims.api\\repositories\\salerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:repositories\\salerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart inventory system\\backend\\sims.api\\repositories\\commonrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:repositories\\commonrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart-inventory-management\\backend\\sims.api\\irepositories\\ipurchaserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:irepositories\\ipurchaserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart inventory system\\backend\\sims.api\\irepositories\\ilocationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:irepositories\\ilocationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart-inventory-management\\backend\\sims.api\\helper\\commonhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:helper\\commonhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart inventory system\\backend\\sims.api\\irepositories\\icommonrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:irepositories\\icommonrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart-inventory-management\\backend\\sims.api\\models\\inventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:models\\inventory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart inventory system\\backend\\sims.api\\irepositories\\icategoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:irepositories\\icategoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart inventory system\\backend\\sims.api\\storedprocedure\\callstoredprocedure.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:storedprocedure\\callstoredprocedure.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart inventory system\\backend\\sims.api\\dto\\location\\warehousedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:dto\\location\\warehousedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart inventory system\\backend\\sims.api\\helper\\dependencyinjections.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:helper\\dependencyinjections.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart inventory system\\backend\\sims.api\\controllers\\warehousecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:controllers\\warehousecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart inventory system\\backend\\sims.api\\controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart inventory system\\backend\\sims.api\\controllers\\commoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:controllers\\commoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart inventory system\\backend\\sims.api\\irepositories\\ishoprepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:irepositories\\ishoprepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart inventory system\\backend\\sims.api\\models\\location.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart-inventory-management\\backend\\sims.api\\models\\location.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:models\\location.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart-inventory-management\\backend\\sims.api\\models\\saleitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:models\\saleitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart-inventory-management\\backend\\sims.api\\models\\sale.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:models\\sale.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart-inventory-management\\backend\\sims.api\\repositories\\purchaserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:repositories\\purchaserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart-inventory-management\\backend\\sims.api\\dto\\purchasedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:dto\\purchasedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|d:\\practices\\smart-inventory-management\\backend\\sims.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{47CAA028-FB2A-429C-969F-E356E53B2D4A}|Sims.Api.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -70,210 +58,181 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:1651011228:0:{83107a3e-496a-485e-b455-16ddb978e55e}"
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "CallStoredProcedure.cs",
-              "DocumentMoniker": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\StoredProcedure\\CallStoredProcedure.cs",
-              "RelativeDocumentMoniker": "StoredProcedure\\CallStoredProcedure.cs",
-              "ToolTip": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\StoredProcedure\\CallStoredProcedure.cs",
-              "RelativeToolTip": "StoredProcedure\\CallStoredProcedure.cs",
-              "ViewState": "AgIAAF0AAAAAAAAAAAAIwIAAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T19:38:13.384Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "WarehouseDto.cs",
-              "DocumentMoniker": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Dto\\Location\\WarehouseDto.cs",
-              "RelativeDocumentMoniker": "Dto\\Location\\WarehouseDto.cs",
-              "ToolTip": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Dto\\Location\\WarehouseDto.cs",
-              "RelativeToolTip": "Dto\\Location\\WarehouseDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T19:29:37.276Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "DependencyInjections.cs",
-              "DocumentMoniker": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Helper\\DependencyInjections.cs",
-              "RelativeDocumentMoniker": "Helper\\DependencyInjections.cs",
-              "ToolTip": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Helper\\DependencyInjections.cs",
-              "RelativeToolTip": "Helper\\DependencyInjections.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAA5AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T19:26:03.009Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "CategoryController.cs",
-              "DocumentMoniker": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Controllers\\CategoryController.cs",
-              "RelativeDocumentMoniker": "Controllers\\CategoryController.cs",
-              "ToolTip": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Controllers\\CategoryController.cs",
-              "RelativeToolTip": "Controllers\\CategoryController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T19:24:32.043Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "WarehouseController.cs",
-              "DocumentMoniker": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Controllers\\WarehouseController.cs",
-              "RelativeDocumentMoniker": "Controllers\\WarehouseController.cs",
-              "ToolTip": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Controllers\\WarehouseController.cs",
-              "RelativeToolTip": "Controllers\\WarehouseController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAA9AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T19:24:25.091Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "LocationRepository.cs",
-              "DocumentMoniker": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Repositories\\LocationRepository.cs",
-              "RelativeDocumentMoniker": "Repositories\\LocationRepository.cs",
-              "ToolTip": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Repositories\\LocationRepository.cs",
-              "RelativeToolTip": "Repositories\\LocationRepository.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAgwJsAAAASAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T19:18:15.872Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ProductRepository.cs.cs",
-              "DocumentMoniker": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Repositories\\ProductRepository.cs.cs",
-              "RelativeDocumentMoniker": "Repositories\\ProductRepository.cs.cs",
-              "ToolTip": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Repositories\\ProductRepository.cs.cs",
-              "RelativeToolTip": "Repositories\\ProductRepository.cs.cs",
-              "ViewState": "AgIAAJ0AAAAAAAAAAAAAwL0AAAAJAAAAAAAAAA==",
+              "Title": "SalesController.cs",
+              "DocumentMoniker": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Controllers\\SalesController.cs",
+              "RelativeDocumentMoniker": "Controllers\\SalesController.cs",
+              "ToolTip": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Controllers\\SalesController.cs",
+              "RelativeToolTip": "Controllers\\SalesController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACgAAACkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T19:12:06.666Z",
+              "WhenOpened": "2025-07-04T14:42:08.794Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "ILocationRepository.cs",
-              "DocumentMoniker": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\IRepositories\\ILocationRepository.cs",
-              "RelativeDocumentMoniker": "IRepositories\\ILocationRepository.cs",
-              "ToolTip": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\IRepositories\\ILocationRepository.cs",
-              "RelativeToolTip": "IRepositories\\ILocationRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAA5AAAAAAAAAA==",
+              "Title": "CommonHelper.cs",
+              "DocumentMoniker": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Helper\\CommonHelper.cs",
+              "RelativeDocumentMoniker": "Helper\\CommonHelper.cs",
+              "ToolTip": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Helper\\CommonHelper.cs",
+              "RelativeToolTip": "Helper\\CommonHelper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T19:11:01.411Z",
+              "WhenOpened": "2025-07-02T10:34:37.218Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Inventory.cs",
+              "DocumentMoniker": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Models\\Inventory.cs",
+              "RelativeDocumentMoniker": "Models\\Inventory.cs",
+              "ToolTip": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Models\\Inventory.cs",
+              "RelativeToolTip": "Models\\Inventory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-02T10:33:24.675Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Location.cs",
+              "DocumentMoniker": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Models\\Location.cs",
+              "RelativeDocumentMoniker": "Models\\Location.cs",
+              "ToolTip": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Models\\Location.cs",
+              "RelativeToolTip": "Models\\Location.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-02T10:33:10.331Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Sale.cs",
+              "DocumentMoniker": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Models\\Sale.cs",
+              "RelativeDocumentMoniker": "Models\\Sale.cs",
+              "ToolTip": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Models\\Sale.cs",
+              "RelativeToolTip": "Models\\Sale.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-02T10:32:50.4Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "PurchaseRepository.cs",
+              "DocumentMoniker": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Repositories\\PurchaseRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\PurchaseRepository.cs",
+              "ToolTip": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Repositories\\PurchaseRepository.cs",
+              "RelativeToolTip": "Repositories\\PurchaseRepository.cs",
+              "ViewState": "AgIAAJ8AAAAAAAAAAAA2wMIAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-30T11:37:34.423Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SaleRepository.cs",
+              "DocumentMoniker": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Repositories\\SaleRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\SaleRepository.cs",
+              "ToolTip": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Repositories\\SaleRepository.cs",
+              "RelativeToolTip": "Repositories\\SaleRepository.cs",
+              "ViewState": "AgIAAO0AAAAAAAAAAAAwwP0AAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-27T14:29:36.599Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "CommonController.cs",
-              "DocumentMoniker": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Controllers\\CommonController.cs",
-              "RelativeDocumentMoniker": "Controllers\\CommonController.cs",
-              "ToolTip": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Controllers\\CommonController.cs",
-              "RelativeToolTip": "Controllers\\CommonController.cs",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAUwDAAAAAfAAAAAAAAAA==",
+              "DocumentIndex": 10,
+              "Title": "PurchaseDto.cs",
+              "DocumentMoniker": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Dto\\PurchaseDto.cs",
+              "RelativeDocumentMoniker": "Dto\\PurchaseDto.cs",
+              "ToolTip": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Dto\\PurchaseDto.cs",
+              "RelativeToolTip": "Dto\\PurchaseDto.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAIBCwAoAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T19:09:57.44Z",
+              "WhenOpened": "2025-06-27T11:17:18.677Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAAAC8AAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-27T10:40:39.872Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PurchaseController.cs",
+              "DocumentMoniker": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Controllers\\PurchaseController.cs",
+              "RelativeDocumentMoniker": "Controllers\\PurchaseController.cs",
+              "ToolTip": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Controllers\\PurchaseController.cs",
+              "RelativeToolTip": "Controllers\\PurchaseController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-27T06:57:00.023Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "CommonRepository.cs",
-              "DocumentMoniker": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Repositories\\CommonRepository.cs",
-              "RelativeDocumentMoniker": "Repositories\\CommonRepository.cs",
-              "ToolTip": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Repositories\\CommonRepository.cs",
-              "RelativeToolTip": "Repositories\\CommonRepository.cs",
-              "ViewState": "AgIAACYAAAAAAAAAAAAAwEMAAABNAAAAAAAAAA==",
+              "Title": "IPurchaseRepository.cs",
+              "DocumentMoniker": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\IRepositories\\IPurchaseRepository.cs",
+              "RelativeDocumentMoniker": "IRepositories\\IPurchaseRepository.cs",
+              "ToolTip": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\IRepositories\\IPurchaseRepository.cs",
+              "RelativeToolTip": "IRepositories\\IPurchaseRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAACOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T19:09:19.638Z",
+              "WhenOpened": "2025-06-25T15:44:31.385Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "IShopRepository.cs",
-              "DocumentMoniker": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\IRepositories\\IShopRepository.cs",
-              "RelativeDocumentMoniker": "IRepositories\\IShopRepository.cs",
-              "ToolTip": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\IRepositories\\IShopRepository.cs",
-              "RelativeToolTip": "IRepositories\\IShopRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "SaleItem.cs",
+              "DocumentMoniker": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Models\\SaleItem.cs",
+              "RelativeDocumentMoniker": "Models\\SaleItem.cs",
+              "ToolTip": "D:\\practices\\Smart-inventory-Management\\backend\\Sims.Api\\Models\\SaleItem.cs",
+              "RelativeToolTip": "Models\\SaleItem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T19:09:05.596Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ICommonRepository.cs",
-              "DocumentMoniker": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\IRepositories\\ICommonRepository.cs",
-              "RelativeDocumentMoniker": "IRepositories\\ICommonRepository.cs",
-              "ToolTip": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\IRepositories\\ICommonRepository.cs",
-              "RelativeToolTip": "IRepositories\\ICommonRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T19:08:38.463Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "ICategoryRepository.cs",
-              "DocumentMoniker": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\IRepositories\\ICategoryRepository.cs",
-              "RelativeDocumentMoniker": "IRepositories\\ICategoryRepository.cs",
-              "ToolTip": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\IRepositories\\ICategoryRepository.cs",
-              "RelativeToolTip": "IRepositories\\ICategoryRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAA6AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T19:08:28.623Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "CategoryRepository.cs",
-              "DocumentMoniker": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Repositories\\CategoryRepository.cs",
-              "RelativeDocumentMoniker": "Repositories\\CategoryRepository.cs",
-              "ToolTip": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Repositories\\CategoryRepository.cs*",
-              "RelativeToolTip": "Repositories\\CategoryRepository.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAJsAAAAOAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T19:08:22.014Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "Location.cs",
-              "DocumentMoniker": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Models\\Location.cs",
-              "RelativeDocumentMoniker": "Models\\Location.cs",
-              "ToolTip": "D:\\Practices\\Smart inventory system\\backend\\Sims.Api\\Models\\Location.cs",
-              "RelativeToolTip": "Models\\Location.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T14:25:33.841Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-24T17:38:43.71Z"
             }
           ]
         }

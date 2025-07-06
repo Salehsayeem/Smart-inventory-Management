@@ -13,7 +13,10 @@ namespace Sims.Api.Helper
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddScoped<ICommonRepository, CommonRepository>();
+            services.AddScoped<ISupplierRepository, SupplierRepository>();
+            services.AddScoped<IPurchaseRepository, PurchaseRepository>();
             services.AddSingleton<CallStoredProcedure>();
             return services;
         }
