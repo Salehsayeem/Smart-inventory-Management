@@ -1,4 +1,4 @@
-import { ApiResponse, CreateOrUpdateShopDto, CreateUserRequest, KeyValuePairDto, PermissionDetails, Permissions, ProfileType, RegisteredShops, UpdatePermissionsRequest, UpdateProfileRequest } from '../types';
+import { ApiResponse, CreateOrUpdateProductDto, CreateOrUpdateShopDto, CreateUserRequest, KeyValuePairDto, PermissionDetails, Permissions, ProfileType, RegisteredShops, UpdatePermissionsRequest, UpdateProfileRequest } from '../types';
 import { getUserIdFromToken, removeTokenFromCookie ,getSelectedShopFromCookie} from '../utils/cookieUtils';
 import { showError, showSuccess } from '../utils/toastService';
 import axios from './axiosConfig';
@@ -127,6 +127,32 @@ export const createOrUpdateShop = async (
 export const deleteShop = async (shopId: number): Promise<string> => {
   return await apiService.put<string, number>(`/shop/deleteShop`, shopId);
 };
+//#endregion
 
+//#region Product APIs
+export const createOrUpdateProduct = async (
+  data: CreateOrUpdateProductDto
+): Promise<string> => {
+  return await apiService.post<string, CreateOrUpdateProductDto>(
+    '/product/createOrUpdateProduct',
+    data
+  );
+};
 
+//https://localhost:7268/api/Product/GetProductByShopId?search=test&shopId=1&pageNo=1&pageSize=11
+export const getProductsByShopId = async (
+  search: string,
+  shopId: number,
+  pageNo: number,
+  pageSize: number
+): Promise<ApiResponse<CreateOrUpdateProductDto[]>> => {
+  return await apiService.get<ApiResponse<CreateOrUpdateProductDto[]>>(
+    `/product/getProductByShopId`,
+    { search, shopId, pageNo, pageSize }
+  );
+};
+
+export const deleteProduct = async (productId: number): Promise<string> => {
+  return await apiService.delete<string>(`/product/deleteProduct?productId=${encodeURIComponent(productId)}`);
+};
 //#endregion

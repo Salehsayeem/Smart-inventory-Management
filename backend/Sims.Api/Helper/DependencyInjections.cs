@@ -17,6 +17,7 @@ namespace Sims.Api.Helper
             services.AddScoped<ICommonRepository, CommonRepository>();
             services.AddScoped<ISupplierRepository, SupplierRepository>();
             services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+            services.AddScoped<IReportRepository, ReportRepository>();
             services.AddSingleton<CallStoredProcedure>();
             return services;
         }

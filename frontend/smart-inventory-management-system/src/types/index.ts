@@ -82,6 +82,25 @@ export interface CreateOrUpdateShopDto {
   name: string;
   address: string;
 }
+export interface CreateOrUpdateProductDto {
+  id: number;
+  shopId: number;
+  categoryId: number;
+  name: string;
+  sku: string;
+  description: string;
+  unitPrice: string;
+}
+export interface ProductLandingDataDto {
+  sl: number;
+  id: number;
+  name: string;
+  sku: string;
+  description: string;
+  categoryName?: string;
+  unitPrice: number;
+}
+
 export interface ApiResponse<T> {
   statusCode: number;
   message: string;

@@ -88,6 +88,12 @@ namespace Sims.Api.Helper
             public static readonly string GetAllSuppliersPagination = "fn_get_all_suppliers_pagination";
             public static readonly string GetAllPurchaseOrdersPagination = "fn_get_all_purchase_orders_pagination";
             public static readonly string GetAllSaleOrdersPagination = "fn_get_all_sales_orders_pagination";
+            public static readonly string GetAllSalesSummaryPagination = "fn_get_sales_summary_pagination";
+            public static readonly string GetAllTopProductsPagination = "fn_get_top_products_pagination";
+            public static readonly string GetInventoryStatusPagination = "fn_get_inventory_status_pagination";
+            public static readonly string GetLowStockProductsPagination = "fn_get_low_stock_products_pagination";
+            public static readonly string GetSupplierPerformancePagination = "fn_get_supplier_performance_pagination";
+            public static readonly string GetStockMovementHistoryPagination = "fn_get_stock_movement_history_pagination";
 
         }
     }
