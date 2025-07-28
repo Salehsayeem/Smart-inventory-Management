@@ -1,0 +1,29 @@
+/* filepath: src/app/auth/login/login.component.scss */
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+.auth-form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  width: 100%;
+  max-width: 400px;
+}
+.form-group {
+  margin-bottom: 1rem;
+}
+.error {
+  color: #d32f2f;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+.link {
+  display: block;
+  margin-top: 1rem;
+  color: #1976d2;
+  text-align: right;
+}

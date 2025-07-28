@@ -1,13 +1,12 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, signal } from '@angular/core';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  standalone: false,
+  styleUrl: './app.scss',
 })
-export class AppComponent {
-  title = 'smart-inventory-management';
+export class App {
+  protected readonly title = signal('smart-inventory-management');
 }
