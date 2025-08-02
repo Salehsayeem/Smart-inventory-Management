@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
 import { ApiService } from '../../api/api-service';
-import { SnackbarService } from '../../components/snackbar/snackbar.service';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth-service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class Login {
   loading = false;
   error: string | null = null;
 
-  constructor(private fb: FormBuilder, private api: ApiService,  private snackbar: SnackbarService) {
+  constructor(private fb: FormBuilder, private api: ApiService, private router: Router, private auth: AuthService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
@@ -23,23 +24,24 @@ export class Login {
 
   }
 
- onSubmit() {
-  if (this.loginForm.invalid) return;
-  this.loading = true;
-  this.api.login(this.loginForm.value).subscribe({
-    next: (res) => {
-      this.loading = false;
-      if (res.statusCode >= 200 && res.statusCode < 300) {
-        this.snackbar.show(res.message || 'Login successful', 'success');
-        // ...handle success
-      } else {
-        this.snackbar.show(res.message || 'Login failed', 'error');
+  onSubmit() {
+    if (this.loginForm.invalid) return;
+    this.loading = true;
+    this.error = null;
+    this.api.login(this.loginForm.value).subscribe({
+      next: (res) => {
+        this.loading = false;
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          this.auth.storeToken(res.data);
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.error = res.message || 'Login failed';
+        }
+      },
+      error: (err) => {
+        this.loading = false;
+        this.error = err.error?.message || 'Login failed';
       }
-    },
-    error: (err) => {
-      this.loading = false;
-      this.snackbar.show(err.error?.message || 'Login failed', 'error');
-    }
-  });
-}
+    });
+  }
 }

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../../auth/auth-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,5 +8,10 @@ import { Component } from '@angular/core';
   styleUrl: './dashboard.scss'
 })
 export class Dashboard {
+  constructor(private authService: AuthService) {
+    console.log('Dashboard component initialized');
+    const data = this.authService.decodeToken();
+    console.log('Decoded token data:', data);
+  }
 
 }

@@ -1,29 +1,38 @@
 /* filepath: src/app/auth/login/login.component.scss */
-.auth-wrapper {
+.login-container {
+  min-height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  min-height: 80vh;
+  justify-content: center;
+  background: #f5f6fa;
 }
-.auth-form {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+
+.login-card {
   width: 100%;
   max-width: 400px;
+  padding: 2rem 1.5rem;
+  box-sizing: border-box;
 }
-.form-group {
-  margin-bottom: 1rem;
+
+.login-title {
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+  margin: 0.5rem 0 1.5rem 0;
 }
-.error {
-  color: #d32f2f;
-  font-size: 0.9rem;
-  margin-top: 0.25rem;
+
+.full-width {
+  width: 100%;
+  margin-bottom: 1.25rem;
 }
-.link {
-  display: block;
+
+.signup-link {
+  text-align: center;
   margin-top: 1rem;
-  color: #1976d2;
-  text-align: right;
+}
+
+.error-message {
+  color: #d32f2f;
+  text-align: center;
+  margin-top: 0.5rem;
 }
