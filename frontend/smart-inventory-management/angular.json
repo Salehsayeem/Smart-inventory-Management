@@ -30,6 +30,9 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "stylePreprocessorOptions": {
+              "includePaths": ["src"]
+            },
             "assets": [
               {
                 "glob": "**/*",
@@ -54,6 +57,7 @@
                   "maximumError": "8kB"
                 }
               ],
+              "aot": true,
               "outputHashing": "all"
             },
             "development": {
@@ -68,6 +72,7 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
+            
               "buildTarget": "smart-inventory-management:build:production"
             },
             "development": {
@@ -88,6 +93,9 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
+            "stylePreprocessorOptions": {
+              "includePaths": ["src"]
+            },
             "assets": [
               {
                 "glob": "**/*",

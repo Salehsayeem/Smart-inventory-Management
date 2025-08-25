@@ -1,12 +1,28 @@
-import { Component, signal } from '@angular/core';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { Component, HostListener, OnInit, signal } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.html',
   standalone: false,
+  templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App {
-  protected readonly title = signal('smart-inventory-management');
+export class App implements OnInit {
+  isLeftSidebarCollapsed = false;
+  screenWidth = window.innerWidth;
+  @HostListener('window:resize')
+  onResize() {
+    this.screenWidth = window.innerWidth;
+    if (this.screenWidth < 768) {
+      this.isLeftSidebarCollapsed = true;
+    }
+  }
+
+  ngOnInit(): void {
+    this.isLeftSidebarCollapsed = this.screenWidth < 768;
+  }
+
+  changeIsLeftSidebarCollapsed(isLeftSidebarCollapsed: boolean): void {
+    this.isLeftSidebarCollapsed = isLeftSidebarCollapsed;
+  }
+
 }
