@@ -27,7 +27,6 @@ export class Login {
   onSubmit() {
     if (this.loginForm.invalid) return;
     this.loading = true;
-    this.error = null;
     this.api.login(this.loginForm.value).subscribe({
       next: (res) => {
         this.loading = false;
@@ -35,12 +34,12 @@ export class Login {
           this.auth.storeToken(res.data);
           this.router.navigate(['/dashboard']);
         } else {
-          this.error = res.message || 'Login failed';
+          console.log('Login failed:', res.message);
         }
       },
       error: (err) => {
         this.loading = false;
-        this.error = err.error?.message || 'Login failed';
+        console.error('Login error:', err);
       }
     });
   }

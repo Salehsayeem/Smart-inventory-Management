@@ -8,13 +8,17 @@ import { SnackbarService } from '../components/snackbar/snackbar.service';
 @Injectable()
 export class ApiFeedbackInterceptor implements HttpInterceptor {
   private snackbar = inject(SnackbarService);
-
+constructor() {
+  console.log('ApiFeedbackInterceptor instance created');
+}
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       tap(event => {
         if (event instanceof HttpResponse) {
+          console.log('HTTP Response:', event);
           // Show success for status 200-299
           if (event.body && event.body.message) {
+              console.log('Snackbar should show:', event.body.message);
             const status = event.body.statusCode || event.status;
             if (status >= 200 && status < 300) {
               this.snackbar.show(event.body.message, 'success');

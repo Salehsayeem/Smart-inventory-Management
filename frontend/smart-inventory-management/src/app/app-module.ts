@@ -4,14 +4,24 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiFeedbackInterceptor } from './api/api-feedback.interceptor';
 
- import { NgxUiLoaderModule, NgxUiLoaderConfig, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
+import { NgxUiLoaderModule, NgxUiLoaderConfig, NgxUiLoaderHttpModule } from 'ngx-ui-loader';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { FeaturesModule } from './features/features-module';
+import { SideNav } from "./components/side-nav/side-nav";
+import { MainPage } from "./features/main-page/main-page";
+const PRIMARY_COLOR = "#006d33";
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
-  bgsColor: "#1b00ff",
+  bgsColor: PRIMARY_COLOR,
   bgsOpacity: 0.5,
   bgsPosition: "bottom-right",
   bgsSize: 90,
@@ -19,7 +29,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   blur: 5,
   delay: 0,
   fastFadeOut: true,
-  fgsColor: "#1b00ff",
+  fgsColor: PRIMARY_COLOR,
   fgsPosition: "center-center",
   fgsSize: 60,
   fgsType: "square-jelly-box",
@@ -30,7 +40,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   masterLoaderId: "master",
   overlayBorderRadius: "0",
   overlayColor: "rgba(40, 40, 40, 0.8)",
-  pbColor: "blue",
+  pbColor: PRIMARY_COLOR,
   pbDirection: "ltr",
   pbThickness: 4,
   hasProgressBar: true,
@@ -48,14 +58,23 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   imports: [
     BrowserModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatDividerModule,
+    MatIconModule,
     MatSlideToggleModule,
     MatSnackBarModule,
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
-    NgxUiLoaderHttpModule.forRoot({ showForeground: true }) // <-- Automatically shows loader on all HTTP calls
-  ],
+    NgxUiLoaderHttpModule.forRoot({ showForeground: true }),
+    FeaturesModule,
+    SideNav,
+    MainPage
+],
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideHttpClient(),
+    provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: ApiFeedbackInterceptor, multi: true }
   ],
   bootstrap: [App]

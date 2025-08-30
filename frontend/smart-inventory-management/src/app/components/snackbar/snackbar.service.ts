@@ -9,7 +9,7 @@ export class SnackbarService {
     const config: MatSnackBarConfig = {
       duration: 3500,
       horizontalPosition: 'right',
-      verticalPosition: 'top',
+      verticalPosition: 'bottom',
       panelClass: type === 'success' ? ['snackbar-success'] : ['snackbar-error'],
       // Custom animation classes can be added here if needed
     };

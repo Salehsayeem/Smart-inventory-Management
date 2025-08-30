@@ -9,9 +9,9 @@ import { AuthService } from '../../auth/auth-service';
 })
 export class Dashboard {
   constructor(private authService: AuthService) {
-    console.log('Dashboard component initialized');
-    const data = this.authService.decodeToken();
-    console.log('Decoded token data:', data);
   }
-
+  logout() {
+    this.authService.clearToken();
+    window.location.href = 'auth/login';
+  }
 }

@@ -1,2 +1,9 @@
-<ngx-ui-loader></ngx-ui-loader>
-<router-outlet></router-outlet>
+<app-side-nav
+  [isLeftSidebarCollapsed]="isLeftSidebarCollapsed"
+  (changeIsLeftSidebarCollapsed)="changeIsLeftSidebarCollapsed($event)"
+></app-side-nav>
+
+<app-main-page
+  [isLeftSidebarCollapsed]="isLeftSidebarCollapsed"
+  [screenWidth]="screenWidth"
+></app-main-page>
